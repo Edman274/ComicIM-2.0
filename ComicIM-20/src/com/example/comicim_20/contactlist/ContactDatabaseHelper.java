@@ -93,4 +93,16 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 		
 		return result;
 	}
+	
+	public Message addMessage(Conversation conversation, boolean fromMe, String text) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		
+		ContentValues cv = new ContentValues();
+		cv.put("conversation_id", conversation.id);
+		cv.put("from_me", fromMe ? 1 : 0);
+		cv.put("message_text", text);
+		
+		long id = db.insert(TABLE_CONVERSATIONS, null, cv);
+		return new Message(id, conversation, fromMe, text);
+	}
 }
