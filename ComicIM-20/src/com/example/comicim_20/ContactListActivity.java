@@ -30,26 +30,23 @@ public class ContactListActivity extends ActionBarActivity {
 	private static String TAG = ContactListActivity.class.getName();
 	
 	public ContactDatabaseHelper databaseHelper;
-	public List<Contact> contacts = new ArrayList<Contact>();
+	public List<Contact> contacts;
 	public ListView contactListView;
+	public ContactListAdapter contactListViewAdapter;
 	private final int PICK_CONTACT = 1;
-	
-	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contact_list_activity);
         
-        
-        contacts.add(new Contact("+79037852844"));
-        contacts.add(new Contact("+16147079195"));
-        
         contactListView = (ListView) this.findViewById(R.id.contact_list);
         
         databaseHelper = new ContactDatabaseHelper(this);
-        ContactListAdapter adapter = new ContactListAdapter(this, contacts);
-        contactListView.setAdapter(adapter);
+        contacts = databaseHelper.getAllContacts();
+        
+        contactListViewAdapter = new ContactListAdapter(this, contacts);
+        contactListView.setAdapter(contactListViewAdapter);
         
         contactListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -95,11 +92,11 @@ public class ContactListActivity extends ActionBarActivity {
 					cursor.moveToFirst();
 					int column = cursor.getColumnIndex(Phone.NUMBER);
 					
-					//
 					String phoneNumber = PhoneNumberUtils.stripSeparators(cursor.getString(column));
-					Log.d(TAG, phoneNumber);
-					//recipientTextView.setText(phoneNumber);
-					//updateConversationView(phoneNumber, frameView, textView1,(LinearLayout)findViewById(R.id.linearLayout1));
+					
+					Contact contact = this.databaseHelper.newContact(phoneNumber);
+					contacts.add(contact);
+					contactListViewAdapter.notifyDataSetChanged();
 				}
 			}
 	}
