@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.PhoneNumberUtils;
@@ -40,7 +41,7 @@ public class ContactListActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contact_list_activity);
-        
+                
         contactListView = (ListView) this.findViewById(R.id.contact_list);
         
         databaseHelper = new ContactDatabaseHelper(this);

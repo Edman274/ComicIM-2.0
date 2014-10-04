@@ -3,12 +3,15 @@ package com.example.comicim_20.messageview;
 import java.util.ArrayList;
 
 import com.example.comicim_20.ContactListActivity;
+//import com.example.comicim_20.IntentFilter;
 import com.example.comicim_20.R;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.view.Menu;
@@ -17,15 +20,25 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.content.IntentFilter;
 
 
 
 public class MessageView extends Activity{
+	
+	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+    	@Override
+    	public void onReceive(Context context, Intent intent) {
+    	    // Get extra data included in the Intent
+    	    String message = intent.getStringExtra("message");
+    	    Log.d("receiver", "Got message:");
+    	  }
+    };
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,8 +64,8 @@ public class MessageView extends Activity{
         //list.setAdapter(listAdapter);
         registerForContextMenu(list);
         
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("update-messages"));
         
-
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,8 +76,6 @@ public class MessageView extends Activity{
 
                 //gets message text
                 String message = enterText.getText().toString().trim();
-                
-                
 
                 sendMessage(num, message);
 
@@ -86,7 +97,6 @@ public class MessageView extends Activity{
 		    public void afterTextChanged(Editable s) 
 		    {
 				int messageLength[] = SmsMessage.calculateLength(s.toString(), false);
-				// FIXME: This is hardcoded to handle only septets, we want to be able to use things OTHER than septets in the future
 				charCount.setText(Integer.toString(messageLength[2]));
 				if(messageLength[0] > 1) {
 					charCount.append("[" + Integer.toString(messageLength[0] - 1) + "]");
@@ -95,7 +105,9 @@ public class MessageView extends Activity{
 		    }
 		    public void beforeTextChanged(CharSequence s, int start, int count, int after) 
 		    {
-		        /*This method is called to notify you that, within s, the count characters beginning at start are about to be replaced by new text with length after. It is an error to attempt to make changes to s from this callback.*/ 
+		        /*This method is called to notify you that, within s, the count characters beginning 
+		         * at start are about to be replaced by new text with length after. 
+		         * It is an error to attempt to make changes to s from this callback.*/ 
 		    }
 		    public void onTextChanged(CharSequence s, int start, int before, int count) { }
 		  
@@ -134,5 +146,11 @@ public class MessageView extends Activity{
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    protected void onDestroy() {
+    	  // Unregister since the activity is about to be closed.
+    	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+    	  super.onDestroy();
     }
 }
