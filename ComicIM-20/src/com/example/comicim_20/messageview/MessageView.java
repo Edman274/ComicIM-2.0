@@ -37,7 +37,7 @@ public class MessageView extends Activity{
 		final TextView contactInfo = (TextView)findViewById(R.id.contactInf);
 		final TextView enterText = (TextView)findViewById(R.id.messageField);
 		final Button sendButton = (Button)findViewById(R.id.buttonSend);
-        // ADDME: final TextView charCount = (TextView) findViewById(R.id.charCount);
+        final TextView charCount = (TextView) findViewById(R.id.charCount);
 
 
         contactInfo.setText(num);
@@ -45,7 +45,7 @@ public class MessageView extends Activity{
         final ArrayList<String> messageList = new ArrayList<String>();
         final ListView list = (ListView)findViewById(R.id.messageList);
         final ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, messageList);
-        // ADDME: addTextChangedListenerOnEditText(enterText, charCount);
+        addTextChangedListenerOnEnterText(enterText, charCount);
         list.setAdapter(listAdapter);
         registerForContextMenu(list);
         

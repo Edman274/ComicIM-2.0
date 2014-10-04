@@ -57,7 +57,7 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 		ContentValues cv = new ContentValues();
 		cv.put("phone_number", phoneNumber);
 		
-		long id = this.getWritableDatabase().insert("contacts", null, cv);
+		long id = this.getWritableDatabase().insert(TABLE_CONTACTS, null, cv);
 		return new Contact(id, phoneNumber);
 	}
 	
@@ -81,5 +81,14 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 		}
 		
 		return contacts;
+	}
+	
+	public Contact newMessage(String phoneNumber, String message) {
+		ContentValues cv = new ContentValues();
+		cv.put("message_text", message);
+		cv.put("phone_number", phoneNumber);
+		
+		long id = this.getWritableDatabase().insert(TABLE_MESSAGES, null, cv);
+		return new Contact(id, phoneNumber);
 	}
 }
