@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 	private static final String TAG = "DatabaseHelper";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = ContactDatabaseHelper.class.getPackage().getName();
 	
     private static final String TABLE_CONVERSATIONS = "conversations";
