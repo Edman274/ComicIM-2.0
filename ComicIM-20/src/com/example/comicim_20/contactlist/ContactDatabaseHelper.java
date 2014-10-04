@@ -70,7 +70,7 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 		return new Conversation(cursor.getLong(0), cursor.getString(1));
 	}
 	
-	public List<Conversation> getAllContacts() {
+	public List<Conversation> getAllConversations() {
 		List<Conversation> result = new ArrayList<Conversation>();
 		Cursor cursor = selectContacts();
 		
