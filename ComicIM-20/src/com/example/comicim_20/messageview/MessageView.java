@@ -44,9 +44,11 @@ public class MessageView extends Activity{
         
         final ArrayList<String> messageList = new ArrayList<String>();
         final ListView list = (ListView)findViewById(R.id.messageList);
-        final ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, messageList);
+        final MessageAdapter messageAdapter = new MessageAdapter(this, messageList);
+        //final ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, messageList);
         addTextChangedListenerOnEnterText(enterText, charCount);
-        list.setAdapter(listAdapter);
+        list.setAdapter(messageAdapter);
+        //list.setAdapter(listAdapter);
         registerForContextMenu(list);
         
         
@@ -71,7 +73,7 @@ public class MessageView extends Activity{
 
                 //adds message to list
                 messageList.add(message);
-                listAdapter.notifyDataSetChanged();
+                messageAdapter.notifyDataSetChanged();
             }	
         });
         
