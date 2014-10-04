@@ -30,7 +30,7 @@ public class ContactListActivity extends ActionBarActivity {
 	private static String TAG = ContactListActivity.class.getName();
 	
 	public ContactDatabaseHelper databaseHelper;
-	public List<Contact> contacts;
+	public List<Conversation> contacts;
 	public ListView contactListView;
 	public ContactListAdapter contactListViewAdapter;
 	private final int PICK_CONTACT = 1;
@@ -96,7 +96,7 @@ public class ContactListActivity extends ActionBarActivity {
 					
 					String phoneNumber = PhoneNumberUtils.stripSeparators(cursor.getString(column));
 					
-					Contact contact = this.databaseHelper.newContact(phoneNumber);
+					Conversation contact = this.databaseHelper.newContact(phoneNumber);
 					contacts.add(contact);
 					contactListViewAdapter.notifyDataSetChanged();
 				}

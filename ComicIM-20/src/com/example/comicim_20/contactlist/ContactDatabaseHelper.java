@@ -3,7 +3,7 @@ package com.example.comicim_20.contactlist;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.comicim_20.Contact;
+import com.example.comicim_20.Conversation;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -16,11 +16,11 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = ContactDatabaseHelper.class.getPackage().getName();
 	
-    private static final String TABLE_CONTACTS = "contacts";
+    private static final String TABLE_CONVERSATIONS = "conversations";
     private static final String TABLE_MESSAGES = "messages";
     
     private static final String CREATE_TABLE_CONTACTS = 
-    		"create table " + TABLE_CONTACTS + "("
+    		"create table " + TABLE_CONVERSATIONS + "("
     		+ "id integer primary key, "
     		+ "phone_number text"
     		+ ")";
@@ -46,40 +46,40 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int arg1, int arg2) {
 		// on upgrade drop older tables
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONVERSATIONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGES);
  
         // create new tables
         onCreate(db);
 	}
 	
-	public Contact newContact(String phoneNumber) {
+	public Conversation newContact(String phoneNumber) {
 		ContentValues cv = new ContentValues();
 		cv.put("phone_number", phoneNumber);
 		
-		long id = this.getWritableDatabase().insert("contacts", null, cv);
-		return new Contact(id, phoneNumber);
+		long id = this.getWritableDatabase().insert(TABLE_CONVERSATIONS, null, cv);
+		return new Conversation(id, phoneNumber);
 	}
 	
 	public Cursor selectContacts() {
 		SQLiteDatabase db = this.getReadableDatabase();
-		return db.rawQuery("select * from " + TABLE_CONTACTS, null);
+		return db.rawQuery("select * from " + TABLE_CONVERSATIONS, null);
 	}
 	
-	public Contact getContact(Cursor cursor) {
-		return new Contact(cursor.getLong(0), cursor.getString(1));
+	public Conversation getContact(Cursor cursor) {
+		return new Conversation(cursor.getLong(0), cursor.getString(1));
 	}
 	
-	public List<Contact> getAllContacts() {
-		List<Contact> contacts = new ArrayList<Contact>();
+	public List<Conversation> getAllContacts() {
+		List<Conversation> result = new ArrayList<Conversation>();
 		Cursor cursor = selectContacts();
 		
 		if (cursor.moveToFirst()) {
 			do {
-				contacts.add(getContact(cursor));
+				result.add(getContact(cursor));
 	        } while (cursor.moveToNext());
 		}
 		
-		return contacts;
+		return result;
 	}
 }

@@ -1,6 +1,6 @@
 package com.example.comicim_20.contactlist;
 
-import com.example.comicim_20.Contact;
+import com.example.comicim_20.Conversation;
 import com.example.comicim_20.R;
 import com.example.comicim_20.R.id;
 
@@ -23,7 +23,7 @@ public final class ContactViewHolder {
 		messageCount = (TextView) v.findViewById(R.id.contact_row_message_count);
 	}
 	
-	public void populate(Contact c) {
+	public void populate(Conversation c) {
 		photo.setImageResource(R.drawable.ic_action_person);
 		name.setText(c.phoneNumber);
 	}
