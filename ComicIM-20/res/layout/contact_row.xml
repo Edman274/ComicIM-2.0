@@ -75,7 +75,6 @@
             <TextView 
             	android:textSize="10.5sp" 
             	android:textStyle="bold" 
-            	android:textColor="@*android:color/white" 
             	android:gravity="center" 
             	android:layout_gravity="center_vertical" 
             	android:id="@+id/contact_row_message_count" 
