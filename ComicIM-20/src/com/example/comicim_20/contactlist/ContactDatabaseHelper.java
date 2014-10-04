@@ -3,7 +3,8 @@ package com.example.comicim_20.contactlist;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.comicim_20.Contact;
+import com.example.comicim_20.Conversation;
+import com.example.comicim_20.Message;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -16,20 +17,19 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = ContactDatabaseHelper.class.getPackage().getName();
 	
-    private static final String TABLE_CONTACTS = "contacts";
+    private static final String TABLE_CONVERSATIONS = "conversations";
     private static final String TABLE_MESSAGES = "messages";
     
-    private static final String CREATE_TABLE_CONTACTS = 
-    		"create table " + TABLE_CONTACTS + "("
+    private static final String CREATE_TABLE_CONVERSATIONS = 
+    		"create table " + TABLE_CONVERSATIONS + "("
     		+ "id integer primary key, "
     		+ "phone_number text"
     		+ ")";
     private static final String CREATE_TABLE_MESSAGES = 
     		"create table " + TABLE_MESSAGES + "("
     		+ "id integer primary key, "
-    		+ "contact_id integer, "
-    		+ "time_sent integer, "
-    		+ "time_received integer, "
+    		+ "conversation_id integer, "
+    		+ "from_me integer, "
     		+ "message_text text"
     		+ ")";
     
@@ -39,56 +39,70 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 	
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(CREATE_TABLE_CONTACTS);
+		db.execSQL(CREATE_TABLE_CONVERSATIONS);
 		db.execSQL(CREATE_TABLE_MESSAGES);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int arg1, int arg2) {
 		// on upgrade drop older tables
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONVERSATIONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGES);
  
         // create new tables
         onCreate(db);
 	}
 	
-	public Contact newContact(String phoneNumber) {
+	public Conversation newContact(String phoneNumber) {
 		ContentValues cv = new ContentValues();
 		cv.put("phone_number", phoneNumber);
 		
-		long id = this.getWritableDatabase().insert(TABLE_CONTACTS, null, cv);
-		return new Contact(id, phoneNumber);
+		long id = this.getWritableDatabase().insert(TABLE_CONVERSATIONS, null, cv);
+		return new Conversation(id, phoneNumber);
 	}
 	
-	public Cursor selectContacts() {
+	public List<Conversation> getAllConversations() {
+		List<Conversation> result = new ArrayList<Conversation>();
 		SQLiteDatabase db = this.getReadableDatabase();
-		return db.rawQuery("select * from " + TABLE_CONTACTS, null);
-	}
-	
-	public Contact getContact(Cursor cursor) {
-		return new Contact(cursor.getLong(0), cursor.getString(1));
-	}
-	
-	public List<Contact> getAllContacts() {
-		List<Contact> contacts = new ArrayList<Contact>();
-		Cursor cursor = selectContacts();
+		Cursor cursor = db.rawQuery("select * from " + TABLE_CONVERSATIONS, null);
 		
 		if (cursor.moveToFirst()) {
 			do {
-				contacts.add(getContact(cursor));
+				result.add(new Conversation(cursor.getLong(0), cursor.getString(1)));
 	        } while (cursor.moveToNext());
 		}
 		
-		return contacts;
+		return result;
 	}
 	
-	public Contact newMessage(String phoneNumber, String message) {
-		ContentValues cv = new ContentValues();
-		cv.put("message_text", message);
-		cv.put("phone_number", phoneNumber);
+	public List<Message> getAllMessages(Conversation conversation) {
+		List<Message> result = new ArrayList<Message>();
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(
+				"select (id, from_me, message_text) from " + TABLE_MESSAGES + " where conversation_id=" + conversation.id, null);
 		
-		long id = this.getWritableDatabase().insert(TABLE_MESSAGES, null, cv);
-		return new Contact(id, phoneNumber);
+		if (cursor.moveToFirst()) {
+			do {
+				result.add(new Message(
+						cursor.getLong(0),
+						conversation,
+						cursor.getLong(1) != 0,
+						cursor.getString(2)));
+	        } while (cursor.moveToNext());
+		}
+		
+		return result;
+	}
+	
+	public Message addMessage(Conversation conversation, boolean fromMe, String text) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		
+		ContentValues cv = new ContentValues();
+		cv.put("conversation_id", conversation.id);
+		cv.put("from_me", fromMe ? 1 : 0);
+		cv.put("message_text", text);
+		
+		long id = db.insert(TABLE_CONVERSATIONS, null, cv);
+		return new Message(id, conversation, fromMe, text);
 	}
 }

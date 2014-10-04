@@ -30,7 +30,7 @@ public class ContactListActivity extends ActionBarActivity {
 	private static String TAG = ContactListActivity.class.getName();
 	
 	public ContactDatabaseHelper databaseHelper;
-	public List<Contact> contacts;
+	public List<Conversation> conversations;
 	public ListView contactListView;
 	public ContactListAdapter contactListViewAdapter;
 	private final int PICK_CONTACT = 1;
@@ -44,17 +44,17 @@ public class ContactListActivity extends ActionBarActivity {
         contactListView = (ListView) this.findViewById(R.id.contact_list);
         
         databaseHelper = new ContactDatabaseHelper(this);
-        contacts = databaseHelper.getAllContacts();
+        conversations = databaseHelper.getAllConversations();
         
-        contactListViewAdapter = new ContactListAdapter(this, contacts);
+        contactListViewAdapter = new ContactListAdapter(this, conversations);
         contactListView.setAdapter(contactListViewAdapter);
         
         contactListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Log.i(TAG, "Clicked on " + contacts.get(position).phoneNumber);
+				Log.i(TAG, "Clicked on " + conversations.get(position).phoneNumber);
 				Intent intent = new Intent(view.getContext(), MessageView.class);
-				intent.putExtra(NUMBER, contacts.get(position).phoneNumber);
+				intent.putExtra(NUMBER, conversations.get(position).phoneNumber);
 				startActivity(intent);
 			}
         });
@@ -96,8 +96,8 @@ public class ContactListActivity extends ActionBarActivity {
 					
 					String phoneNumber = PhoneNumberUtils.stripSeparators(cursor.getString(column));
 					
-					Contact contact = this.databaseHelper.newContact(phoneNumber);
-					contacts.add(contact);
+					Conversation contact = this.databaseHelper.newContact(phoneNumber);
+					conversations.add(contact);
 					contactListViewAdapter.notifyDataSetChanged();
 				}
 			}

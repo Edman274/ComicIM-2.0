@@ -11,11 +11,11 @@ import android.widget.ArrayAdapter;
 
 import com.example.comicim_20.*;
 
-public final class ContactListAdapter extends ArrayAdapter<Contact> {
+public final class ContactListAdapter extends ArrayAdapter<Conversation> {
 	public Context context;
-	public List<Contact> model;
+	public List<Conversation> model;
 	
-	public ContactListAdapter(Context ctx, List<Contact> model) {
+	public ContactListAdapter(Context ctx, List<Conversation> model) {
 		super(ctx, R.layout.contact_row, model);
 		this.context = ctx;
 		this.model = model;
