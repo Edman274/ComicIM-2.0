@@ -5,11 +5,12 @@ import java.util.List;
 
 import com.example.comicim_20.contactlist.ContactDatabaseHelper;
 import com.example.comicim_20.contactlist.ContactListAdapter;
-
+import com.example.comicim_20.messageview.MessageView;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
@@ -54,7 +55,8 @@ public class ContactListActivity extends ActionBarActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Log.i(TAG, "Clicked on " + contacts.get(position).phoneNumber);
-				
+				Intent intent = new Intent(view.getContext(), MessageView.class);
+				startActivity(intent);
 			}
         });
     }
