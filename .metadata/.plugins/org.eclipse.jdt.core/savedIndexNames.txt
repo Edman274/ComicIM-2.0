@@ -1,5 +1,0 @@
-INDEX VERSION 1.126+C:\Users\Sam\Documents\GitHub\ComicIM-2.0\.metadata\.plugins\org.eclipse.jdt.core
-1284074322.index
-4258933243.index
-3846859325.index
-3636751811.index
