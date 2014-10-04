@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.telephony.SmsMessage;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.text.Editable;
+import android.text.TextWatcher;
 
 
 
@@ -32,12 +35,16 @@ public class MessageView extends Activity{
         final EditText enterPhone = (EditText)findViewById(R.id.enterPhone);
         final TextView enterText = (TextView)findViewById(R.id.enterText);
         final Button sendButton = (Button)findViewById(R.id.sendButton);
+        // ADDME: final TextView charCount = (TextView) findViewById(R.id.charCount);
 
         final ArrayList<String> messageList = new ArrayList<String>();
         final ListView list = (ListView)findViewById(R.id.mList);
         final ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, messageList);
+        // ADDME: addTextChangedListenerOnEditText(enterText, charCount);
         list.setAdapter(listAdapter);
         registerForContextMenu(list);
+        
+        
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +57,8 @@ public class MessageView extends Activity{
                 //gets number and message text
                 String phoneNumber = enterPhone.getText().toString().trim();
                 String message = enterText.getText().toString().trim();
+                
+                
 
                 sendMessage(phoneNumber, message);
 
@@ -64,9 +73,42 @@ public class MessageView extends Activity{
         
     }
 	
+	public void addTextChangedListenerOnEnterText(TextView enterText,  final TextView charCount ){
+		
+    	enterText.addTextChangedListener(new TextWatcher()
+		{
+		    public void afterTextChanged(Editable s) 
+		    {
+				int messageLength[] = SmsMessage.calculateLength(s.toString(), false);
+				// FIXME: This is hardcoded to handle only septets, we want to be able to use things OTHER than septets in the future
+				charCount.setText(Integer.toString(messageLength[2]));
+				if(messageLength[0] > 1) {
+					charCount.append("[" + Integer.toString(messageLength[0] - 1) + "]");
+					
+				}
+		    }
+		    public void beforeTextChanged(CharSequence s, int start, int count, int after) 
+		    {
+		        /*This method is called to notify you that, within s, the count characters beginning at start are about to be replaced by new text with length after. It is an error to attempt to make changes to s from this callback.*/ 
+		    }
+		    public void onTextChanged(CharSequence s, int start, int before, int count) { }
+		  
+		}
+    			
+    );}
+	
 	private static void sendMessage(String phoneNumber, String message) {
-        SmsManager sm = SmsManager.getDefault();
-        sm.sendTextMessage(phoneNumber, null, message, null, null);
+        SmsManager smsManager = SmsManager.getDefault();
+		int messageLength[] = SmsMessage.calculateLength(message, false);
+
+        if(phoneNumber.length() > 0 && message.length() > 0 && messageLength[0] == 1){
+        	smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+        }
+        
+        else if (phoneNumber.length() > 0 && messageLength[0] > 1){
+			ArrayList<String> messageFragments = smsManager.divideMessage(message);
+			smsManager.sendMultipartTextMessage(phoneNumber, null, messageFragments, null, null);
+		}
     }
 	
 	@Override
