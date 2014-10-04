@@ -3,6 +3,8 @@
 
     <string name="app_name">ComicIM-20</string>
     <string name="hello_world">Hello world!</string>
+    <string name="action_search">Search</string>
+    <string name="action_add_conversation">Add contact</string>
     <string name="action_settings">Settings</string>
 
 </resources>
