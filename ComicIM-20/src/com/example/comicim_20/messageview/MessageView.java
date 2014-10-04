@@ -2,6 +2,7 @@ package com.example.comicim_20.messageview;
 
 import java.util.ArrayList;
 
+import com.example.comicim_20.ContactListActivity;
 import com.example.comicim_20.R;
 
 import android.app.Activity;
@@ -31,14 +32,18 @@ public class MessageView extends Activity{
         setContentView(R.layout.message_view);
         
         Intent intent = getIntent();
+        final String num = intent.getStringExtra(ContactListActivity.NUMBER);
         
-        final EditText enterPhone = (EditText)findViewById(R.id.enterPhone);
-        final TextView enterText = (TextView)findViewById(R.id.enterText);
-        final Button sendButton = (Button)findViewById(R.id.sendButton);
+		final TextView contactInfo = (TextView)findViewById(R.id.contactInf);
+		final TextView enterText = (TextView)findViewById(R.id.messageField);
+		final Button sendButton = (Button)findViewById(R.id.buttonSend);
         // ADDME: final TextView charCount = (TextView) findViewById(R.id.charCount);
 
+
+        contactInfo.setText(num);
+        
         final ArrayList<String> messageList = new ArrayList<String>();
-        final ListView list = (ListView)findViewById(R.id.mList);
+        final ListView list = (ListView)findViewById(R.id.messageList);
         final ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, messageList);
         // ADDME: addTextChangedListenerOnEditText(enterText, charCount);
         list.setAdapter(listAdapter);
@@ -54,13 +59,12 @@ public class MessageView extends Activity{
                 InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
 
-                //gets number and message text
-                String phoneNumber = enterPhone.getText().toString().trim();
+                //gets message text
                 String message = enterText.getText().toString().trim();
                 
                 
 
-                sendMessage(phoneNumber, message);
+                sendMessage(num, message);
 
                 //resets message field
                 enterText.setText("");
