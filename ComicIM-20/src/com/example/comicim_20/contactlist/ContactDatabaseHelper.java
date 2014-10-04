@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.comicim_20.Conversation;
+import com.example.comicim_20.Message;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -61,22 +62,14 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 		return new Conversation(id, phoneNumber);
 	}
 	
-	public Cursor selectContacts() {
-		SQLiteDatabase db = this.getReadableDatabase();
-		return db.rawQuery("select * from " + TABLE_CONVERSATIONS, null);
-	}
-	
-	public Conversation getContact(Cursor cursor) {
-		return new Conversation(cursor.getLong(0), cursor.getString(1));
-	}
-	
 	public List<Conversation> getAllConversations() {
 		List<Conversation> result = new ArrayList<Conversation>();
-		Cursor cursor = selectContacts();
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery("select * from " + TABLE_CONVERSATIONS, null);
 		
 		if (cursor.moveToFirst()) {
 			do {
-				result.add(getContact(cursor));
+				result.add(new Conversation(cursor.getLong(0), cursor.getString(1)));
 	        } while (cursor.moveToNext());
 		}
 		
