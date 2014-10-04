@@ -33,7 +33,7 @@ public class ContactListActivity extends ActionBarActivity {
 	public List<Contact> contacts = new ArrayList<Contact>();
 	public ListView contactListView;
 	private final int PICK_CONTACT = 1;
-	
+	final public static String NUMBER = "com.example.comicim_20";
 	
 	
     @Override
@@ -56,6 +56,7 @@ public class ContactListActivity extends ActionBarActivity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Log.i(TAG, "Clicked on " + contacts.get(position).phoneNumber);
 				Intent intent = new Intent(view.getContext(), MessageView.class);
+				intent.putExtra(NUMBER, contacts.get(position).phoneNumber);
 				startActivity(intent);
 			}
         });
