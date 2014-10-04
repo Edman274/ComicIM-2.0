@@ -20,7 +20,7 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_CONVERSATIONS = "conversations";
     private static final String TABLE_MESSAGES = "messages";
     
-    private static final String CREATE_TABLE_CONTACTS = 
+    private static final String CREATE_TABLE_CONVERSATIONS = 
     		"create table " + TABLE_CONVERSATIONS + "("
     		+ "id integer primary key, "
     		+ "phone_number text"
@@ -28,9 +28,8 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_MESSAGES = 
     		"create table " + TABLE_MESSAGES + "("
     		+ "id integer primary key, "
-    		+ "contact_id integer, "
-    		+ "time_sent integer, "
-    		+ "time_received integer, "
+    		+ "conversation_id integer, "
+    		+ "from_me integer, "
     		+ "message_text text"
     		+ ")";
     
@@ -40,7 +39,7 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 	
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(CREATE_TABLE_CONTACTS);
+		db.execSQL(CREATE_TABLE_CONVERSATIONS);
 		db.execSQL(CREATE_TABLE_MESSAGES);
 	}
 
@@ -70,6 +69,25 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 		if (cursor.moveToFirst()) {
 			do {
 				result.add(new Conversation(cursor.getLong(0), cursor.getString(1)));
+	        } while (cursor.moveToNext());
+		}
+		
+		return result;
+	}
+	
+	public List<Message> getAllMessages(Conversation conversation) {
+		List<Message> result = new ArrayList<Message>();
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(
+				"select (id, from_me, message_text) from " + TABLE_MESSAGES + " where conversation_id=" + conversation.id, null);
+		
+		if (cursor.moveToFirst()) {
+			do {
+				result.add(new Message(
+						cursor.getLong(0),
+						conversation,
+						cursor.getLong(1) != 0,
+						cursor.getString(2)));
 	        } while (cursor.moveToNext());
 		}
 		

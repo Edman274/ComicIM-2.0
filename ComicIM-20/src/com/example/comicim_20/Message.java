@@ -1,9 +1,15 @@
 package com.example.comicim_20;
 
 public final class Message {
+	public Message(long id, Conversation conversation, boolean fromMe, String text) {
+		this.id = id;
+		this.conversation = conversation;
+		this.fromMe = fromMe;
+		this.text = text;
+	}
+	
 	public long id;
 	public Conversation conversation;
-	public long timeSent;
-	public long timeReceived;
+	public boolean fromMe;
 	public String text;
 }
