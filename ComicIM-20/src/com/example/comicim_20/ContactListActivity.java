@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.example.comicim_20.contactlist.ContactDatabaseHelper;
 import com.example.comicim_20.contactlist.ContactListAdapter;
+import com.example.comicim_20.messageview.MessageView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -44,6 +46,8 @@ public class ContactListActivity extends ActionBarActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Log.i(TAG, "Clicked on " + contacts.get(position).phoneNumber);
+				Intent intent = new Intent(view.getContext(), MessageView.class);
+				startActivity(intent);
 			}
         });
     }
