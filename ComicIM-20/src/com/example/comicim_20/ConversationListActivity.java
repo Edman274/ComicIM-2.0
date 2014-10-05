@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.comicim_20.contactlist.DatabaseHelper;
-import com.example.comicim_20.contactlist.ContactListAdapter;
+import com.example.comicim_20.contactlist.ConversatonListAdapter;
 import com.example.comicim_20.messageview.MessageView;
 import com.example.comicim_20.smsreceiver.ConversationListener;
 import com.example.comicim_20.smsreceiver.CoreService;
@@ -61,7 +61,7 @@ public class ConversationListActivity extends ActionBarActivity implements Conve
 		
 		service.addListener(this);
 		
-		contactListViewAdapter = new ContactListAdapter(this, service.conversations);
+		contactListViewAdapter = new ConversatonListAdapter(this, service.conversations);
         contactListView.setAdapter(contactListViewAdapter);
         
         registerForContextMenu(contactListView);
@@ -85,7 +85,7 @@ public class ConversationListActivity extends ActionBarActivity implements Conve
 	}
 	
 	public ListView contactListView;
-	public ContactListAdapter contactListViewAdapter;
+	public ConversatonListAdapter contactListViewAdapter;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {

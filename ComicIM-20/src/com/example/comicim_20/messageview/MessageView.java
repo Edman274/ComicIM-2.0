@@ -7,7 +7,7 @@ import com.example.comicim_20.Conversation;
 import com.example.comicim_20.Message;
 //import com.example.comicim_20.IntentFilter;
 import com.example.comicim_20.R;
-import com.example.comicim_20.contactlist.ContactListAdapter;
+import com.example.comicim_20.contactlist.ConversatonListAdapter;
 import com.example.comicim_20.smsreceiver.ConversationListener;
 import com.example.comicim_20.smsreceiver.CoreService;
 
