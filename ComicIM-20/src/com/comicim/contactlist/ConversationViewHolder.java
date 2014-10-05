@@ -25,7 +25,7 @@ public final class ConversationViewHolder {
 	}
 	
 	public void populate(Conversation c) {
-		if (c.picture == null) {
+		if (c.picture == null || c.picture == "") {
 			photo.setImageResource(R.drawable.ic_action_person);
 		} else {
 			photo.setImageURI(Uri.parse(c.picture));
