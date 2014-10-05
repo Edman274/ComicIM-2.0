@@ -28,8 +28,7 @@
         </activity>
         
         <activity
-            android:name="com.comicim.messageview.MessageView"
-            android:label="@string/app_name" >
+            android:name="com.comicim.messageview.MessageView" >
         </activity>
         
         <receiver

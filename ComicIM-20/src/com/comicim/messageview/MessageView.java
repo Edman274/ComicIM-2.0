@@ -39,7 +39,6 @@ import android.content.IntentFilter;
 
 public class MessageView extends Activity implements ConversationListener {
 	private static final String TAG = "MessageView";
-	
 	private CoreService service;
 	private final ServiceConnection serviceConnection = new ServiceConnection() {
 		@Override
@@ -54,11 +53,12 @@ public class MessageView extends Activity implements ConversationListener {
 		}
 	};
 	protected void onServiceConnected() {
-		Log.i(TAG, "Service connected.");
+		Log.i(TAG, "Service connected.");		
 		
 		service.addListener(this);
 		conversation = service.getConversation(conversationId);
-		contactInfo.setText(conversation.phoneNumber);
+		setTitle(conversation.name);
+		//contactInfo.setText("Phone: " + conversation.phoneNumber);
 		
         messageAdapter = new MessageAdapter(this, this.conversation);
         list.setAdapter(messageAdapter);
@@ -110,7 +110,7 @@ public class MessageView extends Activity implements ConversationListener {
         this.startService(new Intent(this, CoreService.class));
 		this.bindService(new Intent(this, CoreService.class), this.serviceConnection, Context.BIND_AUTO_CREATE);
         
-		contactInfo = (TextView)findViewById(R.id.contactInf);
+		//contactInfo = (TextView)findViewById(R.id.contactInf);
 		enterText = (TextView)findViewById(R.id.messageField);
 		sendButton = (Button)findViewById(R.id.buttonSend);
         charCount = (TextView) findViewById(R.id.charCount);
