@@ -4,6 +4,7 @@ import com.comicim.Conversation;
 import com.example.comicim_20.R;
 import com.example.comicim_20.R.id;
 
+import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,8 +25,12 @@ public final class ConversationViewHolder {
 	}
 	
 	public void populate(Conversation c) {
-		photo.setImageResource(R.drawable.ic_action_person);
-		lastTime.setText(c.phoneNumber);
+		if (c.picture == null) {
+			photo.setImageResource(R.drawable.ic_action_person);
+		} else {
+			photo.setImageURI(Uri.parse(c.picture));
+		}		
+		messageCount.setText(c.phoneNumber);
 		name.setText(c.name);
 	}
 }

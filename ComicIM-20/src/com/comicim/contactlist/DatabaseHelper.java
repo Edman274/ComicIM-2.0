@@ -26,6 +26,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
     		+ "id integer primary key, "
     		+ "phone_number text"
     		+ "name text"
+    		+ "picture"
     		+ ")";
     private static final String CREATE_TABLE_MESSAGES = 
     		"create table " + TABLE_MESSAGES + "("
@@ -55,13 +56,18 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
 	}
 	
-	public Conversation newContact(String phoneNumber, String name) {
+	public Conversation newContact(String phoneNumber, String name, String picture) {
 		Log.i(TAG, "newContact");
 		ContentValues cv = new ContentValues();
 		cv.put("phone_number", phoneNumber);
+		if (name.contains(" ")) {
+			name = name.substring(0, name.indexOf(' ')) + "4" + name.substring(name.indexOf(' '));
+		}
 		cv.put("name", name);
+		cv.put("picture", picture);
 		long id = this.getWritableDatabase().insert(TABLE_CONVERSATIONS, null, cv);
-		return new Conversation(id, phoneNumber, name);
+		name = name.substring(0, name.indexOf('4')) + name.substring(name.indexOf('4') + 1);
+		return new Conversation(id, phoneNumber, name, picture);
 	}
 	
 	public List<Conversation> getAllConversations() {
@@ -72,7 +78,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		
 		if (cursor.moveToFirst()) {
 			do {
-				result.add(new Conversation(cursor.getLong(0), cursor.getString(1), cursor.getString(2)));
+				result.add(new Conversation(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3)));
 	        } while (cursor.moveToNext());
 		}
 		

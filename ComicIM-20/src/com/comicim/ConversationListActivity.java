@@ -150,10 +150,12 @@ public class ConversationListActivity extends ActionBarActivity implements Conve
 					Cursor cursor = getContentResolver().query(contactUri, null, null, null, null);
 					int column2 = cursor.getColumnIndex(Phone.DISPLAY_NAME);
 					int column1 = cursor.getColumnIndex(Phone.NUMBER);
+					int column3 = cursor.getColumnIndex(Phone.PHOTO_ID);
 					cursor.moveToFirst();
 					String phoneNumber = PhoneNumberUtils.stripSeparators(cursor.getString(column1));
 					String name = cursor.getString(column2);
-					Conversation contact = this.service.database.newContact(phoneNumber, name);
+					String picture = cursor.getString(column3);
+					Conversation contact = this.service.database.newContact(phoneNumber, name, picture);
 					service.conversations.add(contact);
 					this.onNewConversation(contact);
 				}
