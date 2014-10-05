@@ -24,16 +24,16 @@ public final class ConversatonListAdapter extends ArrayAdapter<Conversation> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = null;
-		ContactViewHolder holder = null;
+		ConversationViewHolder holder = null;
 		
 		if (convertView == null) {
 			LayoutInflater inflater = ((Activity) context).getLayoutInflater();
 			view = inflater.inflate(R.layout.contact_row, null);
-			holder = new ContactViewHolder(view);
+			holder = new ConversationViewHolder(view);
 			view.setTag(holder);
 		} else {
 			view = convertView;
-			holder = (ContactViewHolder) convertView.getTag();
+			holder = (ConversationViewHolder) convertView.getTag();
 		}
 		
 		holder.populate(model.get(position));

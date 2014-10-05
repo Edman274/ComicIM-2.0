@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.example.comicim_20.Conversation;
 import com.example.comicim_20.Message;
 import com.example.comicim_20.R;
-import com.example.comicim_20.contactlist.ContactViewHolder;
+import com.example.comicim_20.contactlist.ConversationViewHolder;
 
 import android.app.Activity;
 import android.content.Context;
