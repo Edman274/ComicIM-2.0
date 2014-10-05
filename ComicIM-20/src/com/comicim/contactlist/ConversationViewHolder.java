@@ -24,8 +24,12 @@ public final class ConversationViewHolder {
 	}
 	
 	public void populate(Conversation c) {
-		photo.setImageResource(R.drawable.ic_action_person);
-		lastTime.setText(c.phoneNumber);
+		if (c.picture == 0) {
+			photo.setImageResource(R.drawable.ic_action_person);
+		} else {
+			photo.setImageResource(c.picture);
+		}		
+		messageCount.setText(c.phoneNumber);
 		name.setText(c.name);
 	}
 }

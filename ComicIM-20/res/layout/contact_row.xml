@@ -44,7 +44,7 @@
                 	android:id="@+id/contact_row_name"
                 	android:layout_width="wrap_content" 
                 	android:layout_height="wrap_content" 
-                	android:textSize="18.0sp"
+                	android:textSize="21.0sp"
                 	android:ellipsize="end"
                 	android:singleLine="true" />
             </FrameLayout>

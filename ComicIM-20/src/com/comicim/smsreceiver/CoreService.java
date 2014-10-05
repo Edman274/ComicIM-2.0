@@ -32,6 +32,9 @@ public final class CoreService extends Service {
 	
 	public List<ConversationListener> listeners = new ArrayList<ConversationListener>();
 	
+	String name = null;
+	int picture = 0;
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -162,7 +165,7 @@ public final class CoreService extends Service {
 			}
 		}
 		if (conversation == null) {
-			conversation = database.newContact(phoneNumber);
+			conversation = database.newContact(phoneNumber, name, picture);
 		}
 		return conversation;
 	}
