@@ -60,13 +60,11 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		Log.i(TAG, "newContact");
 		ContentValues cv = new ContentValues();
 		cv.put("phone_number", phoneNumber);
-		if (name.contains(" ")) {
-			name = name.substring(0, name.indexOf(' ')) + "4" + name.substring(name.indexOf(' '));
-		}
-		cv.put("name", name);
-		cv.put("picture", picture);
+		name = name.replaceAll("'", "\'");
+		picture = picture.replaceAll("'", "\'");
+		cv.put("name", "'" + name + "'");
+		cv.put("picture", "'" + picture + "'");
 		long id = this.getWritableDatabase().insert(TABLE_CONVERSATIONS, null, cv);
-		name = name.substring(0, name.indexOf('4')) + name.substring(name.indexOf('4') + 1);
 		return new Conversation(id, phoneNumber, name, picture);
 	}
 	
