@@ -75,6 +75,11 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 		return result;
 	}
 	
+	public void deleteConversation(String number) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TABLE_CONVERSATIONS, "phone_number=" + number, null);
+	}
+	
 	public List<Message> getAllMessages(Conversation conversation) {
 		List<Message> result = new ArrayList<Message>();
 		SQLiteDatabase db = this.getReadableDatabase();
