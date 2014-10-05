@@ -6,12 +6,19 @@ import java.util.List;
 import com.example.comicim_20.contactlist.ContactDatabaseHelper;
 import com.example.comicim_20.contactlist.ContactListAdapter;
 import com.example.comicim_20.messageview.MessageView;
+import com.example.comicim_20.smsreceiver.ConversationListener;
+import com.example.comicim_20.smsreceiver.CoreService;
+
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.net.Uri;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.support.v4.content.LocalBroadcastManager;
@@ -27,40 +34,80 @@ import android.widget.Button;
 import android.widget.ListView;
 
 
-public class ContactListActivity extends ActionBarActivity {
-	private static String TAG = ContactListActivity.class.getName();
+public class ContactListActivity extends ActionBarActivity implements ConversationListener {
+	private static final String TAG = "ContactListActivity";
+	private static final int PICK_CONTACT = 1;
+	public static final String NUMBER = "com.example.comicim_20";
 	
-	public ContactDatabaseHelper databaseHelper;
-	public List<Conversation> conversations;
-	public ListView contactListView;
-	public ContactListAdapter contactListViewAdapter;
-	private final int PICK_CONTACT = 1;
-	final public static String NUMBER = "com.example.comicim_20";
-	
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.contact_list_activity);
-                
-        contactListView = (ListView) this.findViewById(R.id.contact_list);
-        
-        databaseHelper = new ContactDatabaseHelper(this);
-        conversations = databaseHelper.getAllConversations();
-        
-        contactListViewAdapter = new ContactListAdapter(this, conversations);
+	private CoreService service;
+	private final ServiceConnection serviceConnection = new ServiceConnection() {
+		@Override
+		public void onServiceConnected(final ComponentName className, final IBinder binder) {
+			ContactListActivity.this.service = ((CoreService.LocalBinder) binder).getService();
+			ContactListActivity.this.onServiceConnected();
+		}
+
+		@Override
+		public void onServiceDisconnected(final ComponentName className) {
+			ContactListActivity.this.onServiceDisconnected();
+		}
+	};
+	protected void onServiceConnected() {
+		Log.i(TAG, "Service connected.");
+		
+		service.addListener(this);
+		
+		contactListViewAdapter = new ContactListAdapter(this, service.conversations);
         contactListView.setAdapter(contactListViewAdapter);
         
         contactListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Log.i(TAG, "Clicked on " + conversations.get(position).phoneNumber);
 				Intent intent = new Intent(view.getContext(), MessageView.class);
-				intent.putExtra(NUMBER, conversations.get(position).phoneNumber);
+				intent.putExtra(NUMBER, service.conversations.get(position).id);
 				startActivity(intent);
 			}
         });
+	}
+	protected void onServiceDisconnected() {
+		Log.i(TAG, "Service disconnected.");
+		
+		if (this.service != null) {
+			this.service.removeListener(this);
+			this.service = null;
+		}
+	}
+	
+	public ListView contactListView;
+	public ContactListAdapter contactListViewAdapter;
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate.");
+        setContentView(R.layout.contact_list_activity);
+        
+        this.startService(new Intent(this, CoreService.class));
+		this.bindService(new Intent(this, CoreService.class), this.serviceConnection, Context.BIND_AUTO_CREATE);
+        
+        contactListView = (ListView) this.findViewById(R.id.contact_list);
+    }
+    
+    @Override
+    protected void onDestroy() {
+    	unbindService(serviceConnection);
+    	super.onDestroy();
     }
 
+    @Override
+	public void onNewConversation(Conversation c) {
+    	this.contactListViewAdapter.notifyDataSetChanged();
+	}
+	@Override
+	public void onNewMessage(Message m) {
+		// TODO Auto-generated method stub
+		
+	}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -85,6 +132,7 @@ public class ContactListActivity extends ActionBarActivity {
     }
     
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
+    	Log.i(TAG, "onActivityResult.");
 		super.onActivityResult(requestCode, resultCode, data);
 			switch(requestCode) {
 			case(PICK_CONTACT):
@@ -96,11 +144,10 @@ public class ContactListActivity extends ActionBarActivity {
 					int column = cursor.getColumnIndex(Phone.NUMBER);
 					
 					String phoneNumber = PhoneNumberUtils.stripSeparators(cursor.getString(column));
-					
-					Conversation contact = this.databaseHelper.newContact(phoneNumber);
-					conversations.add(contact);
-					contactListViewAdapter.notifyDataSetChanged();
+					Conversation contact = this.service.database.newContact(phoneNumber);
+					service.conversations.add(contact);
+					this.onNewConversation(contact);
 				}
 			}
-	}
+    }
 }

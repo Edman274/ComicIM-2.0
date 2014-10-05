@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.comicim_20.Conversation;
+import com.example.comicim_20.Message;
 import com.example.comicim_20.R;
 
 public class MessageRowHolder {
@@ -17,15 +18,15 @@ public class MessageRowHolder {
 		speech = (TextView)v.findViewById(R.id.speech);
 	}
 	
-	public void populate(String message) {
-		if (message.contains("think")) {
+	public void populate(Message message) {
+		if (message.text.contains("think")) {
 			background.setImageResource(R.drawable.dude_thinking);
-		} else if (message.contains("happy") || message.contains("dance")) {
+		} else if (message.text.contains("happy") || message.text.contains("dance")) {
 			background.setImageResource(R.drawable.dude_dancing);
 		} else {
 			background.setImageResource(R.drawable.dude);
 		}		
-		speech.setText(message);
+		speech.setText(message.text);
 	}
 	
 }

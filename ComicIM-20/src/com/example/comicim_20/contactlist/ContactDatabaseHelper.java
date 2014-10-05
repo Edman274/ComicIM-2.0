@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 	private static final String TAG = "DatabaseHelper";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = ContactDatabaseHelper.class.getPackage().getName();
 	
     private static final String TABLE_CONVERSATIONS = "conversations";
@@ -79,15 +79,15 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 		List<Message> result = new ArrayList<Message>();
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(
-				"select (id, from_me, message_text) from " + TABLE_MESSAGES + " where conversation_id=" + conversation.id, null);
+				"select * from " + TABLE_MESSAGES + " where conversation_id=" + conversation.id, null);
 		
 		if (cursor.moveToFirst()) {
 			do {
 				result.add(new Message(
 						cursor.getLong(0),
 						conversation,
-						cursor.getLong(1) != 0,
-						cursor.getString(2)));
+						cursor.getLong(2) != 0,
+						cursor.getString(3)));
 	        } while (cursor.moveToNext());
 		}
 		
@@ -102,7 +102,7 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 		cv.put("from_me", fromMe ? 1 : 0);
 		cv.put("message_text", text);
 		
-		long id = db.insert(TABLE_CONVERSATIONS, null, cv);
+		long id = db.insert(TABLE_MESSAGES, null, cv);
 		return new Message(id, conversation, fromMe, text);
 	}
 }

@@ -3,14 +3,22 @@ package com.example.comicim_20.messageview;
 import java.util.ArrayList;
 
 import com.example.comicim_20.ContactListActivity;
+import com.example.comicim_20.Conversation;
+import com.example.comicim_20.Message;
 //import com.example.comicim_20.IntentFilter;
 import com.example.comicim_20.R;
+import com.example.comicim_20.contactlist.ContactListAdapter;
+import com.example.comicim_20.smsreceiver.ConversationListener;
+import com.example.comicim_20.smsreceiver.CoreService;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
@@ -18,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -27,73 +36,90 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.content.IntentFilter;
 
-
-
-public class MessageView extends Activity{
+public class MessageView extends Activity implements ConversationListener {
+	private static final String TAG = "MessageView";
 	
-	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-    	@Override
-    	public void onReceive(Context context, Intent intent) {
-    	    // Get extra data included in the Intent
-    	    String message = intent.getStringExtra("message");
-    	    Log.d("receiver", "Got message:");
-    	  }
-    };
+	private CoreService service;
+	private final ServiceConnection serviceConnection = new ServiceConnection() {
+		@Override
+		public void onServiceConnected(final ComponentName className, final IBinder binder) {
+			MessageView.this.service = ((CoreService.LocalBinder) binder).getService();
+			MessageView.this.onServiceConnected();
+		}
+
+		@Override
+		public void onServiceDisconnected(final ComponentName className) {
+			MessageView.this.onServiceDisconnected();
+		}
+	};
+	protected void onServiceConnected() {
+		Log.i(TAG, "Service connected.");
+		
+		service.addListener(this);
+		conversation = service.getConversation(conversationId);
+		contactInfo.setText(conversation.phoneNumber);
+		
+        messageAdapter = new MessageAdapter(this, this.conversation);
+        list.setAdapter(messageAdapter);
+        
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //closes keyboard
+                InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+
+                String message = enterText.getText().toString();
+                enterText.setText("");
+
+                //adds message to list
+                service.sendMessage(conversation, message);
+                messageAdapter.notifyDataSetChanged();
+            }	
+        });
+	}
+	protected void onServiceDisconnected() {
+		Log.i(TAG, "Service disconnected.");
+		
+		if (service != null) {
+			service.removeListener(this);
+			service = null;
+		}
+	}
+	
+	TextView contactInfo = null;
+	TextView enterText = null;
+	Button sendButton = null;
+    TextView charCount = null;
+    ListView list = null;
+    MessageAdapter messageAdapter = null;
+    
+    Conversation conversation = null;
+    Long conversationId = null;
+    
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message_view);
         
         Intent intent = getIntent();
-        final String num = intent.getStringExtra(ContactListActivity.NUMBER);
+        conversationId = intent.getLongExtra(ContactListActivity.NUMBER, -1);
         
-		final TextView contactInfo = (TextView)findViewById(R.id.contactInf);
-		final TextView enterText = (TextView)findViewById(R.id.messageField);
-		final Button sendButton = (Button)findViewById(R.id.buttonSend);
-        final TextView charCount = (TextView) findViewById(R.id.charCount);
-
-
-        contactInfo.setText(num);
+        this.startService(new Intent(this, CoreService.class));
+		this.bindService(new Intent(this, CoreService.class), this.serviceConnection, Context.BIND_AUTO_CREATE);
         
-        final ArrayList<String> messageList = new ArrayList<String>();
-        final ListView list = (ListView)findViewById(R.id.messageList);
-        final MessageAdapter messageAdapter = new MessageAdapter(this, messageList);
-        //final ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, messageList);
+		contactInfo = (TextView)findViewById(R.id.contactInf);
+		enterText = (TextView)findViewById(R.id.messageField);
+		sendButton = (Button)findViewById(R.id.buttonSend);
+        charCount = (TextView) findViewById(R.id.charCount);
+        list = (ListView)findViewById(R.id.messageList);
+        
         addTextChangedListenerOnEnterText(enterText, charCount);
-        list.setAdapter(messageAdapter);
-        //list.setAdapter(listAdapter);
         registerForContextMenu(list);
-        
-        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("update-messages"));
-        
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //closes keyboard
-                InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
-
-                //gets message text
-                String message = enterText.getText().toString().trim();
-
-                sendMessage(num, message);
-
-                //resets message field
-                enterText.setText("");
-
-                //adds message to list
-                messageList.add(message);
-                messageAdapter.notifyDataSetChanged();
-            }	
-        });
-        
     }
 	
-	public void addTextChangedListenerOnEnterText(TextView enterText,  final TextView charCount ){
-		
-    	enterText.addTextChangedListener(new TextWatcher()
-		{
+	public void addTextChangedListenerOnEnterText(TextView enterText,  final TextView charCount ) {
+    	enterText.addTextChangedListener(new TextWatcher() {
 		    public void afterTextChanged(Editable s) 
 		    {
 				int messageLength[] = SmsMessage.calculateLength(s.toString(), false);
@@ -111,23 +137,8 @@ public class MessageView extends Activity{
 		    }
 		    public void onTextChanged(CharSequence s, int start, int before, int count) { }
 		  
-		}
-    			
-    );}
-	
-	private static void sendMessage(String phoneNumber, String message) {
-        SmsManager smsManager = SmsManager.getDefault();
-		int messageLength[] = SmsMessage.calculateLength(message, false);
-
-        if(phoneNumber.length() > 0 && message.length() > 0 && messageLength[0] == 1){
-        	smsManager.sendTextMessage(phoneNumber, null, message, null, null);
-        }
-        
-        else if (phoneNumber.length() > 0 && messageLength[0] > 1){
-			ArrayList<String> messageFragments = smsManager.divideMessage(message);
-			smsManager.sendMultipartTextMessage(phoneNumber, null, messageFragments, null, null);
-		}
-    }
+		});
+	}
 	
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -148,9 +159,20 @@ public class MessageView extends Activity{
         return super.onOptionsItemSelected(item);
     }
     
+    @Override
     protected void onDestroy() {
-    	  // Unregister since the activity is about to be closed.
-    	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
-    	  super.onDestroy();
+    	unbindService(serviceConnection);
+    	super.onDestroy();
     }
+	@Override
+	public void onNewConversation(Conversation c) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onNewMessage(Message m) {
+		if (m.conversation.id == conversation.id) {
+			messageAdapter.notifyDataSetChanged();
+		}
+	}
 }

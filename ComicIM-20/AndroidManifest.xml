@@ -47,6 +47,7 @@
 		</intent-filter> -->
 		
 		</receiver>
+        <service android:name=".smsreceiver.CoreService"></service>
     </application>
 
 </manifest>

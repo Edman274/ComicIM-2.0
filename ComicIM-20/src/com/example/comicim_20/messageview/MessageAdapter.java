@@ -2,6 +2,8 @@ package com.example.comicim_20.messageview;
 
 import java.util.ArrayList;
 
+import com.example.comicim_20.Conversation;
+import com.example.comicim_20.Message;
 import com.example.comicim_20.R;
 import com.example.comicim_20.contactlist.ContactViewHolder;
 
@@ -12,15 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-public class MessageAdapter extends ArrayAdapter<String> {
+public class MessageAdapter extends ArrayAdapter<Message> {
 	
 	public Context context;
-	public ArrayList<String> messageList;
+	public Conversation conversation;
 	
-	public MessageAdapter(Context ctx, ArrayList<String> messageList) {
-		super(ctx, R.layout.message_row, messageList);
+	public MessageAdapter(Context ctx, Conversation conversation) {
+		super(ctx, R.layout.message_row, conversation.messages);
 		this.context = ctx;
-		this.messageList = messageList;
+		this.conversation = conversation;
 	}
 	
 	@Override
@@ -36,7 +38,7 @@ public class MessageAdapter extends ArrayAdapter<String> {
 			view = convertView;
 			holder = (MessageRowHolder)convertView.getTag();
 		}
-		holder.populate(messageList.get(position));
+		holder.populate(conversation.messages.get(position));
 		return view;
 	}
 	
