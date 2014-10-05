@@ -15,7 +15,7 @@ import android.util.Log;
 
 public final class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String TAG = "DatabaseHelper";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
     private static final String DATABASE_NAME = DatabaseHelper.class.getPackage().getName();
 	
     private static final String TABLE_CONVERSATIONS = "conversations";
@@ -24,9 +24,9 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_CONVERSATIONS = 
     		"create table " + TABLE_CONVERSATIONS + "("
     		+ "id integer primary key, "
-    		+ "phone_number text"
-    		+ "name text"
-    		+ "picture"
+    		+ "phone_number text,"
+    		+ "name text,"
+    		+ "picture text"
     		+ ")";
     private static final String CREATE_TABLE_MESSAGES = 
     		"create table " + TABLE_MESSAGES + "("
@@ -58,12 +58,14 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	
 	public Conversation newContact(String phoneNumber, String name, String picture) {
 		Log.i(TAG, "newContact");
+		
+		if (name == null) name = "";
+		if (picture == null) picture = "";
+		
 		ContentValues cv = new ContentValues();
 		cv.put("phone_number", phoneNumber);
-		name = name.replaceAll("'", "\'");
-		picture = picture.replaceAll("'", "\'");
-		cv.put("name", "'" + name + "'");
-		cv.put("picture", "'" + picture + "'");
+		cv.put("name", "'" + name.replaceAll("'", "\'") + "'");
+		cv.put("picture", "'" + picture.replaceAll("'", "\'") + "'");
 		long id = this.getWritableDatabase().insert(TABLE_CONVERSATIONS, null, cv);
 		return new Conversation(id, phoneNumber, name, picture);
 	}
