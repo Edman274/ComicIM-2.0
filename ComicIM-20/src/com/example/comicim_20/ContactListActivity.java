@@ -70,7 +70,7 @@ public class ContactListActivity extends ActionBarActivity implements Conversati
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent intent = new Intent(view.getContext(), MessageView.class);
-				intent.putExtra(NUMBER, service.conversations.get(position).id);
+				intent.putExtra(NUMBER, service.conversations.get(position).id);				
 				startActivity(intent);
 			}
         });
@@ -107,6 +107,7 @@ public class ContactListActivity extends ActionBarActivity implements Conversati
 
     @Override
 	public void onNewConversation(Conversation c) {
+    	Log.i(TAG, "onNewConversation");
     	this.contactListViewAdapter.notifyDataSetChanged();
 	}
 	@Override
@@ -169,7 +170,8 @@ public class ContactListActivity extends ActionBarActivity implements Conversati
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle().toString().equals("Remove")) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-            contactListViewAdapter.remove(contactListViewAdapter.getItem(info.position));
+            this.service.database.deleteConversation(contactListViewAdapter.getItem(info.position).phoneNumber);
+            service.conversations.remove(contactListViewAdapter.getItem(info.position));
             contactListViewAdapter.notifyDataSetChanged();
             Toast.makeText(getApplicationContext(), "Conversation deleted.", Toast.LENGTH_SHORT).show();
             return true;
