@@ -3,7 +3,7 @@ package com.example.comicim_20;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.comicim_20.contactlist.ContactDatabaseHelper;
+import com.example.comicim_20.contactlist.DatabaseHelper;
 import com.example.comicim_20.contactlist.ContactListAdapter;
 import com.example.comicim_20.messageview.MessageView;
 import com.example.comicim_20.smsreceiver.ConversationListener;

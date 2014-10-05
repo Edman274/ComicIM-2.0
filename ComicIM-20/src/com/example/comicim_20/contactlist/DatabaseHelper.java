@@ -13,10 +13,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public final class ContactDatabaseHelper extends SQLiteOpenHelper {
+public final class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String TAG = "DatabaseHelper";
     private static final int DATABASE_VERSION = 4;
-    private static final String DATABASE_NAME = ContactDatabaseHelper.class.getPackage().getName();
+    private static final String DATABASE_NAME = DatabaseHelper.class.getPackage().getName();
 	
     private static final String TABLE_CONVERSATIONS = "conversations";
     private static final String TABLE_MESSAGES = "messages";
@@ -34,7 +34,7 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
     		+ "message_text text"
     		+ ")";
     
-	public ContactDatabaseHelper(Context ctx) {
+	public DatabaseHelper(Context ctx) {
 		super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 	

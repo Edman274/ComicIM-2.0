@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.example.comicim_20.Conversation;
 import com.example.comicim_20.Message;
-import com.example.comicim_20.contactlist.ContactDatabaseHelper;
+import com.example.comicim_20.contactlist.DatabaseHelper;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -27,7 +27,7 @@ public final class CoreService extends Service {
 	private final LocalBinder binder = new LocalBinder(this);
 	private final SmsReceiver receiver = new SmsReceiver(this);
 	
-	public ContactDatabaseHelper database;
+	public DatabaseHelper database;
 	public List<Conversation> conversations;
 	
 	public List<ConversationListener> listeners = new ArrayList<ConversationListener>();
@@ -37,7 +37,7 @@ public final class CoreService extends Service {
 		super.onCreate();
 		Log.i(TAG, "onCreate");
 		
-		database = new ContactDatabaseHelper(this);
+		database = new DatabaseHelper(this);
         conversations = database.getAllConversations();
         
         for (Conversation c : conversations) {
