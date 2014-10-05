@@ -1,5 +1,7 @@
 package com.comicim.scene;
 
+import java.util.List;
+
 import com.comicim.Message;
 import com.example.comicim_20.R;
 
@@ -29,7 +31,7 @@ import android.widget.ImageView;
 
 public class SceneView extends View {
 	public Paint textPaint;
-	public Message message;
+	public List<Message> messages;
 	public Drawable dudeDrawable;
 	
 	public SceneView(Context context, AttributeSet attrs) {
@@ -69,15 +71,17 @@ public class SceneView extends View {
     protected void onDraw(Canvas canvas) {
 		Rect canvasRect = new Rect(0, 0, canvas.getWidth(), canvas.getHeight());
 		
-		if (message != null) {
+		if (messages != null) {
 			renderDudes(canvas, canvasRect);
 			canvas.drawLine(0, 0, canvas.getWidth(), canvas.getHeight(), textPaint);
-			canvas.drawText(message.text, 10, 10, textPaint);
+			for (int i = 0; i < messages.size(); i++) {
+				canvas.drawText(messages.get(i).text, 10, 10, textPaint);
+			}
 		}
 		Log.i("SceneView", canvas.getWidth() + " " + canvas.getHeight());
 	}
 
-	public void setMessage(Message message) {
-		this.message = message;
+	public void setMessages(List<Message> messages) {
+		this.messages = messages;
 	}
 }

@@ -72,6 +72,10 @@ public final class CoreService extends Service {
 		
 		Message msg = database.addMessage(conversation, false, body);
 		conversation.messages.add(msg);
+		
+		for (ConversationListener listener : listeners) {
+			listener.onNewMessage(msg);
+		}
 	}
 	
 	@Override
@@ -163,7 +167,13 @@ public final class CoreService extends Service {
 		}
 		if (conversation == null) {
 			conversation = database.newContact(phoneNumber);
+			conversations.add(conversation);
+			
+			for (ConversationListener listener : listeners) {
+				listener.onNewConversation(conversation);
+			}
 		}
+		
 		return conversation;
 	}
 }

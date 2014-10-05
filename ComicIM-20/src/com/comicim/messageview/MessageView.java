@@ -1,6 +1,7 @@
 package com.comicim.messageview;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.comicim.Conversation;
 import com.comicim.ConversationListActivity;
@@ -60,7 +61,9 @@ public class MessageView extends Activity implements ConversationListener {
 		conversation = service.getConversation(conversationId);
 		contactInfo.setText(conversation.phoneNumber);
 		
-        messageAdapter = new MessageAdapter(this, this.conversation);
+		group(4);
+		
+        messageAdapter = new MessageAdapter(this, groupedMessages);
         list.setAdapter(messageAdapter);
         
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +78,7 @@ public class MessageView extends Activity implements ConversationListener {
 
                 //adds message to list
                 service.sendMessage(conversation, message);
+                group(4);
                 messageAdapter.notifyDataSetChanged();
                 list.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
             }	
@@ -86,6 +90,22 @@ public class MessageView extends Activity implements ConversationListener {
 		if (service != null) {
 			service.removeListener(this);
 			service = null;
+		}
+	}
+	
+	List<List<Message>> groupedMessages = new ArrayList<List<Message>>();
+	private void group(int size) {
+		groupedMessages.clear();
+		List<Message> messages = conversation.messages;
+		
+		for (int i = 0; i < messages.size(); i += size) {
+			List<Message> currentGroup = new ArrayList<Message>();
+			
+			for (int j = 0; j < 4 && (i + j) < messages.size(); j++) {
+				currentGroup.add(messages.get(i + j));
+			}
+			
+			groupedMessages.add(currentGroup);
 		}
 	}
 	
@@ -174,6 +194,7 @@ public class MessageView extends Activity implements ConversationListener {
 	@Override
 	public void onNewMessage(Message m) {
 		if (m.conversation.id == conversation.id) {
+			group(4);
 			messageAdapter.notifyDataSetChanged();
 		}
 	}

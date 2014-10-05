@@ -1,6 +1,7 @@
 package com.comicim.messageview;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.comicim.Conversation;
 import com.comicim.Message;
@@ -14,15 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-public class MessageAdapter extends ArrayAdapter<Message> {
+public class MessageAdapter extends ArrayAdapter<List<Message>> {
 	
 	public Context context;
-	public Conversation conversation;
+	public List<List<Message>> groupedMessages;
 	
-	public MessageAdapter(Context ctx, Conversation conversation) {
-		super(ctx, R.layout.message_row, conversation.messages);
+	public MessageAdapter(Context ctx, List<List<Message>> groupedMessages) {
+		super(ctx, R.layout.message_row, groupedMessages);
 		this.context = ctx;
-		this.conversation = conversation;
+		this.groupedMessages = groupedMessages;
 	}
 	
 	@Override
@@ -38,7 +39,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 			view = convertView;
 			holder = (MessageRowHolder)convertView.getTag();
 		}
-		holder.populate(conversation.messages.get(position));
+		holder.populate(groupedMessages.get(position));
 		return view;
 	}
 	

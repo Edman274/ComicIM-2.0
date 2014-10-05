@@ -1,5 +1,7 @@
 package com.comicim.messageview;
 
+import java.util.List;
+
 import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,8 +21,8 @@ public class MessageRowHolder {
 		sceneView = (SceneView) v.findViewById(R.id.picBackground);
 	}
 	
-	public void populate(Message message) {
-		sceneView.setMessage(message);
+	public void populate(List<Message> messages) {
+		sceneView.setMessages(messages);
 	}
 	
 }
