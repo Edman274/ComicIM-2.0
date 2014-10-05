@@ -76,6 +76,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		
 		if (cursor.moveToFirst()) {
 			do {
+				//UGLIER HACK
 				result.add(new Conversation(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3)));
 	        } while (cursor.moveToNext());
 		}
