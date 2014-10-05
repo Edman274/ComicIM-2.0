@@ -124,7 +124,7 @@ public class ContactListActivity extends ActionBarActivity {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
             contactListViewAdapter.remove(contactListViewAdapter.getItem(info.position));
             contactListViewAdapter.notifyDataSetChanged();
-            Toast.makeText(getApplicationContext(), "Removed.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Conversation deleted.", Toast.LENGTH_SHORT).show();
             return true;
         }
         else if (item.getTitle().toString().equals("Add contact")) {
