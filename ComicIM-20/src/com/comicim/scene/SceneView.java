@@ -15,6 +15,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 //import android.graphics.Canvas;
 //import android.graphics.Color;
@@ -22,6 +23,9 @@ import android.graphics.drawable.BitmapDrawable;
 //import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -32,17 +36,30 @@ import android.widget.ImageView;
 //import android.widget.LinearLayout;
 
 public class SceneView extends View {
-	public Paint textPaint;
+	public TextPaint textPaint;
+	public Paint paint;
 	public List<Message> messages;
 	public Drawable dudeDrawable;
+	
+	public static Typeface typeface = null;
 	
 	public SceneView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		
-		textPaint = new Paint();
-		textPaint.setTextSize(30);
-		textPaint.setColor(Color.BLACK);
+		if (typeface == null) {
+			typeface = Typeface.createFromAsset(context.getAssets(), "xkcd.ttf");
+		}
+		
+		textPaint = new TextPaint();
+		textPaint.setTextSize(25);
 		textPaint.setAntiAlias(true);
+		textPaint.setColor(Color.BLACK);
+		textPaint.setTypeface(typeface);
+		
+		paint = new Paint();
+		paint.setTextSize(30);
+		paint.setColor(Color.BLACK);
+		paint.setAntiAlias(true);
 		
 		dudeDrawable = context.getResources().getDrawable(R.drawable.dude);
 	}
@@ -81,15 +98,40 @@ public class SceneView extends View {
 	}
 	
 	public void renderBoundingBox(Canvas canvas) {
-		textPaint.setStyle(Style.STROKE);
+		paint.setStyle(Style.STROKE);
 		RectF rect = new RectF(5, 5, canvas.getWidth() - 5, canvas.getHeight() - 5);
-		canvas.drawRoundRect(rect, 3, 3, textPaint);
-		textPaint.setStyle(Style.FILL_AND_STROKE);
+		canvas.drawRoundRect(rect, 3, 3, paint);
+		paint.setStyle(Style.FILL_AND_STROKE);
 	}
 	
 	public void renderMessages(Canvas canvas) {
+		int width = canvas.getWidth() - 20;
+		int height = canvas.getHeight() / 2 - 15;
+		int maxWidth = width * 3 / 4;
+		
+		int y = 10;
 		for (int i = 0; i < messages.size(); i++) {
-			canvas.drawText(messages.get(i).text, 10, 20 + 20 * i, textPaint);
+			Message msg = messages.get(i);
+			boolean left = !msg.fromMe;
+			
+			StaticLayout layout = new StaticLayout(
+					msg.text, 
+					textPaint, 
+					maxWidth,
+					left ? Layout.Alignment.ALIGN_NORMAL : Layout.Alignment.ALIGN_OPPOSITE,
+					1.0f,
+					1.0f,
+					false);
+			
+			int x = left ?
+					(10) : (10 + width - layout.getWidth());
+			
+			canvas.save();
+			canvas.translate(x, y);
+			layout.draw(canvas);
+			canvas.restore();
+			
+			y += layout.getHeight() + 10;
 		}
 	}
 	

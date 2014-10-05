@@ -58,6 +58,10 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	
 	public Conversation newContact(String phoneNumber, String name, String picture) {
 		Log.i(TAG, "newContact");
+		
+		if (name == null) name = "";
+		if (picture == null) picture = "";
+		
 		ContentValues cv = new ContentValues();
 		cv.put("phone_number", phoneNumber);
 		name = name.replaceAll("'", "\'");
