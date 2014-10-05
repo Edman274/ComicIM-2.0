@@ -61,6 +61,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		ContentValues cv = new ContentValues();
 		cv.put("phone_number", phoneNumber);
 		if (name.contains(" ")) {
+			//UGLY HACK
 			name = name.substring(0, name.indexOf(' ')) + "4" + name.substring(name.indexOf(' '));
 		}
 		cv.put("name", name);
@@ -78,6 +79,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		
 		if (cursor.moveToFirst()) {
 			do {
+				//UGLIER HACK
 				result.add(new Conversation(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3)));
 	        } while (cursor.moveToNext());
 		}
