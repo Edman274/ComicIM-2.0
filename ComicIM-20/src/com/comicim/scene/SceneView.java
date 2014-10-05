@@ -1,5 +1,6 @@
 package com.comicim.scene;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.comicim.Message;
@@ -40,6 +41,7 @@ public class SceneView extends View {
 	public Paint paint;
 	public List<Message> messages;
 	public Drawable dudeDrawable;
+	public ArrayList<Drawable> dudeArray;
 	
 	public static Typeface typeface = null;
 	
@@ -59,7 +61,7 @@ public class SceneView extends View {
 		paint = new Paint();
 		paint.setTextSize(30);
 		paint.setColor(Color.BLACK);
-		paint.setAntiAlias(true);
+		paint.setAntiAlias(true);		
 		
 		dudeDrawable = context.getResources().getDrawable(R.drawable.dude);
 	}
