@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 //import android.graphics.Canvas;
 //import android.graphics.Color;
@@ -26,54 +27,57 @@ import android.view.View;
 import android.widget.ImageView;
 //import android.widget.LinearLayout;
 
-public class SceneView {
+public class SceneView extends View {
+	public Paint textPaint;
+	public Message message;
+	public Drawable dudeDrawable;
 	
-	//private static Context context;
-	private Bitmap bitmap;
-	private Canvas canvas;
-	private Drawable drawable;
+	public SceneView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		
+		textPaint = new Paint();
+		textPaint.setTextSize(40);
+		textPaint.setColor(Color.BLACK);
+		textPaint.setAntiAlias(true);
+		
+		dudeDrawable = context.getResources().getDrawable(R.drawable.dude);
+	}
 	
-	public Drawable newImage(Context context, String text)
-	{
-		Drawable[] layers = new Drawable[2];
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inPurgeable = true;
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+	   // Try for a width based on our minimum
+	   int minw = getPaddingLeft() + getPaddingRight() + getSuggestedMinimumWidth();
+	   int w = resolveSizeAndState(minw, widthMeasureSpec, 1);
+
+	   int minh = MeasureSpec.getSize(w) + getPaddingBottom() + getPaddingTop();
+	   int h = resolveSizeAndState(MeasureSpec.getSize(w), heightMeasureSpec, 0);
+
+	   setMeasuredDimension(w, h);
+	}
+	
+	public void renderDudes(Canvas canvas, Rect rect) {
+		int width = canvas.getWidth();
+		int height = canvas.getHeight();
 		
-		bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.dude_dancing, options).copy(Bitmap.Config.ARGB_4444, true);
-		layers[0] = context.getResources().getDrawable(R.drawable.dude_dancing);
+		int dudeWidth = (height / 2) * dudeDrawable.getIntrinsicWidth() / dudeDrawable.getIntrinsicHeight();
 		
-		Paint paint = new Paint();
-		paint.setStyle(Style.FILL);
-		paint.setColor(Color.BLACK);
-		paint.setTextSize(14);
-		paint.setAntiAlias(true);
+		dudeDrawable.setBounds(0, height * 1 / 2, dudeWidth, height);
+		dudeDrawable.draw(canvas);
+	}
+	
+	@Override
+    protected void onDraw(Canvas canvas) {
+		Rect canvasRect = new Rect(0, 0, canvas.getWidth(), canvas.getHeight());
 		
-		this.canvas = new Canvas(bitmap);
-		
-		
-		String[] textArr = text.split(" ");
-		String string = new String();
-		int offset = 0;
-		string = textArr[0];
-		canvas.drawText(string, 0, canvas.getHeight()/4 + offset, paint);
-		
-		for(int i = 1; i < textArr.length; i++){
-			string = string + " " + textArr[i];
-			Log.d("EdmanDebug", string);
-			if(string.length() > 25){
-				string = new String();
-				string = string + textArr[i];
-				offset += 10;
-			}
-			canvas.drawText(string, 0, canvas.getHeight()/4 + offset, paint);
+		if (message != null) {
+			renderDudes(canvas, canvasRect);
+			canvas.drawLine(0, 0, canvas.getWidth(), canvas.getHeight(), textPaint);
+			canvas.drawText(message.text, 10, 10, textPaint);
 		}
-		layers[1] = new BitmapDrawable(context.getResources(), bitmap);
-		
-		LayerDrawable ld = new LayerDrawable(layers);
-		return ld;
-		//ImageView i = new ImageView(context);
-		//i.setImageDrawable(ld);
-		//return i;
+		Log.i("SceneView", canvas.getWidth() + " " + canvas.getHeight());
 	}
 
+	public void setMessage(Message message) {
+		this.message = message;
+	}
 }

@@ -45,6 +45,7 @@ public final class CoreService extends Service {
         }
 		
 		IntentFilter filter = new IntentFilter();
+		filter.setPriority(1000);
 		filter.addAction("android.provider.Telephony.SMS_RECEIVED");
 		this.registerReceiver(receiver, filter);
 	}
@@ -66,6 +67,8 @@ public final class CoreService extends Service {
 		Log.i(TAG, "onMessage");
 		
 		Conversation conversation = getConversation(sender);
+		
+		Log.i(TAG, "onMessage" + conversation.id + " " + sender + " " + conversation.phoneNumber);
 		
 		Message msg = database.addMessage(conversation, false, body);
 		conversation.messages.add(msg);
@@ -154,7 +157,7 @@ public final class CoreService extends Service {
 		Log.i(TAG, "getConversation");
 		Conversation conversation = null;
 		for (Conversation c : conversations) {
-			if (c.phoneNumber == phoneNumber) {
+			if (c.phoneNumber.equals(phoneNumber)) {
 				conversation = c;
 			}
 		}
