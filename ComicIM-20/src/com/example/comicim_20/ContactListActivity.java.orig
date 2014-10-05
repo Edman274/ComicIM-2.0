@@ -150,9 +150,31 @@ public class ContactListActivity extends ActionBarActivity implements Conversati
 					int column = cursor.getColumnIndex(Phone.NUMBER);
 					
 					String phoneNumber = PhoneNumberUtils.stripSeparators(cursor.getString(column));
+<<<<<<< HEAD
 					Conversation contact = this.service.database.newContact(phoneNumber);
 					service.conversations.add(contact);
 					this.onNewConversation(contact);
+				}
+			}
+=======
+					
+					boolean match = false;
+					for (int i = 0; i < conversations.size(); i++) {
+						Conversation item = conversations.remove(i);
+						if (item.phoneNumber.equals(phoneNumber)) {
+							match = true;
+						}
+						conversations.add(item);
+					}
+					
+					if (!match) {
+						Conversation contact = this.databaseHelper.newContact(phoneNumber);
+						conversations.add(contact);
+						contactListViewAdapter.notifyDataSetChanged();
+					} else {
+						Toast.makeText(getApplicationContext(), "Conversation already exists!", Toast.LENGTH_SHORT).show();
+					}
+					
 				}
 			}
 	}
@@ -179,5 +201,6 @@ public class ContactListActivity extends ActionBarActivity implements Conversati
         } else {
             return false;
         }
+>>>>>>> 1469f0332a5f7e1305122af3242fec544aa30500
     }
 }
