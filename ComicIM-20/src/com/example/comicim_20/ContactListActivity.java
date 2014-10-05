@@ -103,9 +103,23 @@ public class ContactListActivity extends ActionBarActivity {
 					
 					String phoneNumber = PhoneNumberUtils.stripSeparators(cursor.getString(column));
 					
-					Conversation contact = this.databaseHelper.newContact(phoneNumber);
-					conversations.add(contact);
-					contactListViewAdapter.notifyDataSetChanged();
+					boolean match = false;
+					for (int i = 0; i < conversations.size(); i++) {
+						Conversation item = conversations.remove(i);
+						if (item.phoneNumber.equals(phoneNumber)) {
+							match = true;
+						}
+						conversations.add(item);
+					}
+					
+					if (!match) {
+						Conversation contact = this.databaseHelper.newContact(phoneNumber);
+						conversations.add(contact);
+						contactListViewAdapter.notifyDataSetChanged();
+					} else {
+						Toast.makeText(getApplicationContext(), "Conversation already exists!", Toast.LENGTH_SHORT).show();
+					}
+					
 				}
 			}
 	}
