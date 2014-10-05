@@ -1,4 +1,4 @@
-package com.example.comicim_20;
+package com.comicim;
 
 import java.util.ArrayList;
 import java.util.List;

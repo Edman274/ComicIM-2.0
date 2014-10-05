@@ -1,12 +1,12 @@
-package com.example.comicim_20.smsreceiver;
+package com.comicim.smsreceiver;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.comicim_20.Conversation;
-import com.example.comicim_20.Message;
-import com.example.comicim_20.contactlist.DatabaseHelper;
+import com.comicim.Conversation;
+import com.comicim.Message;
+import com.comicim.contactlist.DatabaseHelper;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;

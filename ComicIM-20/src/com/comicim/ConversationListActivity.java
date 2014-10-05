@@ -1,13 +1,14 @@
-package com.example.comicim_20;
+package com.comicim;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.comicim_20.contactlist.DatabaseHelper;
-import com.example.comicim_20.contactlist.ConversatonListAdapter;
-import com.example.comicim_20.messageview.MessageView;
-import com.example.comicim_20.smsreceiver.ConversationListener;
-import com.example.comicim_20.smsreceiver.CoreService;
+import com.comicim.contactlist.ConversatonListAdapter;
+import com.comicim.contactlist.DatabaseHelper;
+import com.comicim.messageview.MessageView;
+import com.comicim.smsreceiver.ConversationListener;
+import com.comicim.smsreceiver.CoreService;
+import com.example.comicim_20.R;
 
 import android.app.Activity;
 import android.content.ComponentName;

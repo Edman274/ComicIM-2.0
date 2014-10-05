@@ -1,11 +1,11 @@
-package com.example.comicim_20.messageview;
+package com.comicim.messageview;
 
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.comicim_20.Conversation;
-import com.example.comicim_20.Message;
+import com.comicim.Conversation;
+import com.comicim.Message;
 import com.example.comicim_20.R;
 
 public class MessageRowHolder {

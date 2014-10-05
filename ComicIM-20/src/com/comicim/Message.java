@@ -1,4 +1,4 @@
-package com.example.comicim_20;
+package com.comicim;
 
 public final class Message {
 	public Message(long id, Conversation conversation, boolean fromMe, String text) {

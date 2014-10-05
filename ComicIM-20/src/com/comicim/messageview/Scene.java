@@ -1,4 +1,4 @@
-package com.example.comicim_20.messageview;
+package com.comicim.messageview;
 
 public final class Scene {
 	public Scene() {

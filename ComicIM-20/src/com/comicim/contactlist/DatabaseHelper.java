@@ -1,10 +1,10 @@
-package com.example.comicim_20.contactlist;
+package com.comicim.contactlist;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.comicim_20.Conversation;
-import com.example.comicim_20.Message;
+import com.comicim.Conversation;
+import com.comicim.Message;
 
 import android.content.ContentValues;
 import android.content.Context;

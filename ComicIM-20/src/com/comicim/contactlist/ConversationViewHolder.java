@@ -1,6 +1,6 @@
-package com.example.comicim_20.contactlist;
+package com.comicim.contactlist;
 
-import com.example.comicim_20.Conversation;
+import com.comicim.Conversation;
 import com.example.comicim_20.R;
 import com.example.comicim_20.R.id;
 

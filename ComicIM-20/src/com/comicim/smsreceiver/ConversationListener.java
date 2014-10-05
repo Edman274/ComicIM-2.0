@@ -1,7 +1,7 @@
-package com.example.comicim_20.smsreceiver;
+package com.comicim.smsreceiver;
 
-import com.example.comicim_20.Conversation;
-import com.example.comicim_20.Message;
+import com.comicim.Conversation;
+import com.comicim.Message;
 
 public interface ConversationListener {
 	public void onNewConversation(Conversation c);

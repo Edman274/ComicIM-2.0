@@ -1,15 +1,15 @@
-package com.example.comicim_20.messageview;
+package com.comicim.messageview;
 
 import java.util.ArrayList;
 
-import com.example.comicim_20.ConversationListActivity;
-import com.example.comicim_20.Conversation;
-import com.example.comicim_20.Message;
+import com.comicim.Conversation;
+import com.comicim.ConversationListActivity;
+import com.comicim.Message;
+import com.comicim.contactlist.ConversatonListAdapter;
+import com.comicim.smsreceiver.ConversationListener;
+import com.comicim.smsreceiver.CoreService;
 //import com.example.comicim_20.IntentFilter;
 import com.example.comicim_20.R;
-import com.example.comicim_20.contactlist.ConversatonListAdapter;
-import com.example.comicim_20.smsreceiver.ConversationListener;
-import com.example.comicim_20.smsreceiver.CoreService;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;

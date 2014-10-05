@@ -1,4 +1,4 @@
-package com.example.comicim_20.scene;
+package com.comicim.scene;
 
 import com.example.comicim_20.R;
 

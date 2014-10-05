@@ -1,11 +1,11 @@
-package com.example.comicim_20.messageview;
+package com.comicim.messageview;
 
 import java.util.ArrayList;
 
-import com.example.comicim_20.Conversation;
-import com.example.comicim_20.Message;
+import com.comicim.Conversation;
+import com.comicim.Message;
+import com.comicim.contactlist.ConversationViewHolder;
 import com.example.comicim_20.R;
-import com.example.comicim_20.contactlist.ConversationViewHolder;
 
 import android.app.Activity;
 import android.content.Context;
