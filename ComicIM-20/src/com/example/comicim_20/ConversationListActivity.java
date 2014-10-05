@@ -38,7 +38,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-public class ContactListActivity extends ActionBarActivity implements ConversationListener {
+public class ConversationListActivity extends ActionBarActivity implements ConversationListener {
 	private static final String TAG = "ContactListActivity";
 	private static final int PICK_CONTACT = 1;
 	public static final String NUMBER = "com.example.comicim_20";
@@ -47,13 +47,13 @@ public class ContactListActivity extends ActionBarActivity implements Conversati
 	private final ServiceConnection serviceConnection = new ServiceConnection() {
 		@Override
 		public void onServiceConnected(final ComponentName className, final IBinder binder) {
-			ContactListActivity.this.service = ((CoreService.LocalBinder) binder).getService();
-			ContactListActivity.this.onServiceConnected();
+			ConversationListActivity.this.service = ((CoreService.LocalBinder) binder).getService();
+			ConversationListActivity.this.onServiceConnected();
 		}
 
 		@Override
 		public void onServiceDisconnected(final ComponentName className) {
-			ContactListActivity.this.onServiceDisconnected();
+			ConversationListActivity.this.onServiceDisconnected();
 		}
 	};
 	protected void onServiceConnected() {

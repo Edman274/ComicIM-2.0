@@ -2,7 +2,7 @@ package com.example.comicim_20.messageview;
 
 import java.util.ArrayList;
 
-import com.example.comicim_20.ContactListActivity;
+import com.example.comicim_20.ConversationListActivity;
 import com.example.comicim_20.Conversation;
 import com.example.comicim_20.Message;
 //import com.example.comicim_20.IntentFilter;
@@ -105,7 +105,7 @@ public class MessageView extends Activity implements ConversationListener {
         setContentView(R.layout.message_view);
         
         Intent intent = getIntent();
-        conversationId = intent.getLongExtra(ContactListActivity.NUMBER, -1);
+        conversationId = intent.getLongExtra(ConversationListActivity.NUMBER, -1);
         
         this.startService(new Intent(this, CoreService.class));
 		this.bindService(new Intent(this, CoreService.class), this.serviceConnection, Context.BIND_AUTO_CREATE);
