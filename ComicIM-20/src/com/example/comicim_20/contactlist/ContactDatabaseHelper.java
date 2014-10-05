@@ -11,6 +11,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 	private static final String TAG = "DatabaseHelper";
@@ -55,6 +56,7 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	public Conversation newContact(String phoneNumber) {
+		Log.i(TAG, "newContact");
 		ContentValues cv = new ContentValues();
 		cv.put("phone_number", phoneNumber);
 		
@@ -63,6 +65,7 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	public List<Conversation> getAllConversations() {
+		Log.i(TAG, "getAllConversations");
 		List<Conversation> result = new ArrayList<Conversation>();
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery("select * from " + TABLE_CONVERSATIONS, null);
@@ -82,6 +85,7 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	public List<Message> getAllMessages(Conversation conversation) {
+		Log.i(TAG, "getAllMessages");
 		List<Message> result = new ArrayList<Message>();
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(
@@ -101,6 +105,7 @@ public final class ContactDatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	public Message addMessage(Conversation conversation, boolean fromMe, String text) {
+		Log.i(TAG, "addMessage");
 		SQLiteDatabase db = this.getWritableDatabase();
 		
 		ContentValues cv = new ContentValues();
