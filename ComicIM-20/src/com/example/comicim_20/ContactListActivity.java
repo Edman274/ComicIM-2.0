@@ -70,7 +70,7 @@ public class ContactListActivity extends ActionBarActivity implements Conversati
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent intent = new Intent(view.getContext(), MessageView.class);
-				intent.putExtra(NUMBER, service.conversations.get(position).id);
+				intent.putExtra(NUMBER, service.conversations.get(position).id);				
 				startActivity(intent);
 			}
         });
