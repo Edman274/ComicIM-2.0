@@ -18,7 +18,13 @@ public class MessageRowHolder {
 	}
 	
 	public void populate(String message) {
-		background.setImageResource(R.drawable.dude);
+		if (message.contains("think")) {
+			background.setImageResource(R.drawable.dude_thinking);
+		} else if (message.contains("happy") || message.contains("dance")) {
+			background.setImageResource(R.drawable.dude_dancing);
+		} else {
+			background.setImageResource(R.drawable.dude);
+		}		
 		speech.setText(message);
 	}
 	

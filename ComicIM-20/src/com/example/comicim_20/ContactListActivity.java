@@ -19,12 +19,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
 public class ContactListActivity extends ActionBarActivity {
@@ -49,6 +53,8 @@ public class ContactListActivity extends ActionBarActivity {
         
         contactListViewAdapter = new ContactListAdapter(this, conversations);
         contactListView.setAdapter(contactListViewAdapter);
+        
+        registerForContextMenu(contactListView);
         
         contactListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -75,7 +81,7 @@ public class ContactListActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_add_conversation){
+        if (id == R.id.action_add_conversation || item.getTitle().toString().equals("Add contact")){
         	Intent contactIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
 			contactIntent.setType(Phone.CONTENT_TYPE); // This line is important! 
 			startActivityForResult(contactIntent, PICK_CONTACT);
@@ -103,4 +109,28 @@ public class ContactListActivity extends ActionBarActivity {
 				}
 			}
 	}
+    
+    public void onCreateContextMenu(ContextMenu menu, View list, ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, list, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        menu.setHeaderTitle("Actions");
+        menu.add(0, list.getId(), 0, "Remove");
+
+    }
+    
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getTitle().toString().equals("Remove")) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+            contactListViewAdapter.remove(contactListViewAdapter.getItem(info.position));
+            contactListViewAdapter.notifyDataSetChanged();
+            Toast.makeText(getApplicationContext(), "Conversation deleted.", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        else if (item.getTitle().toString().equals("Add contact")) {
+        	return onOptionsItemSelected(item);
+        } else {
+            return false;
+        }
+    }
 }

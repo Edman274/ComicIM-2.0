@@ -11,6 +11,8 @@
     <ListView
     	android:id="@+id/contact_list"
     	android:layout_width="fill_parent"
-    	android:layout_height="fill_parent"/>
+    	android:layout_height="fill_parent"
+    	android:clickable="true"
+    	android:longClickable="true"/>
 
 </RelativeLayout>

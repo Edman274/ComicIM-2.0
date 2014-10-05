@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -85,6 +86,7 @@ public class MessageView extends Activity{
                 //adds message to list
                 messageList.add(message);
                 messageAdapter.notifyDataSetChanged();
+                list.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
             }	
         });
         
