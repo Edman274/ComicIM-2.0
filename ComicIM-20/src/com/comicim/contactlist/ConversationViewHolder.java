@@ -5,6 +5,7 @@ import com.example.comicim_20.R;
 import com.example.comicim_20.R.id;
 
 import android.net.Uri;
+import android.provider.ContactsContract.Contacts;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
