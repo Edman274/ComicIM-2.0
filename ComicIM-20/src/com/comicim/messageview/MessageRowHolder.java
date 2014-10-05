@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.comicim.Conversation;
 import com.comicim.Message;
 import com.example.comicim_20.R;
-import com.example.comicim_20.scene.SceneView;
+import com.comicim.scene.SceneView;
 
 public class MessageRowHolder {
 	public Context context;

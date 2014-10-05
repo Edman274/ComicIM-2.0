@@ -1,6 +1,6 @@
 package com.comicim.scene;
 
-import com.example.comicim_20.Message;
+import com.comicim.Message;
 import com.example.comicim_20.R;
 
 import android.content.Context;
