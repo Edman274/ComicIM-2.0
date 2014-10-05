@@ -9,21 +9,11 @@
     tools:context=".MyActivity" >
 
     <TextView
-        android:id="@+id/contactInf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:gravity="center_horizontal"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
         android:id="@+id/charCount"
         android:layout_width="75dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/contactInf"
+        android:layout_alignParentRight="true"
         android:text="160"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -42,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/charCount"
-        android:layout_alignLeft="@+id/contactInf"
+        android:layout_alignParentLeft="true"
         android:layout_alignTop="@+id/buttonSend"
         android:layout_toLeftOf="@+id/charCount"
         android:ems="10"
@@ -58,9 +48,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/buttonSend"
         android:layout_alignLeft="@+id/messageField"
-        android:layout_alignRight="@+id/contactInf"
-        android:layout_below="@+id/contactInf" 
-		android:stackFromBottom="true" >
+        android:layout_alignParentRight="true"
+        android:stackFromBottom="true" >
+
     </ListView>
 
 </RelativeLayout>

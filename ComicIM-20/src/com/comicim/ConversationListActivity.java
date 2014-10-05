@@ -146,13 +146,14 @@ public class ConversationListActivity extends ActionBarActivity implements Conve
 			case(PICK_CONTACT):
 				if(resultCode == Activity.RESULT_OK) {
 					Uri contactUri = data.getData();
-					String[] projection = {Phone.NUMBER};
-					Cursor cursor = getContentResolver().query(contactUri, projection, null, null, null);
+					//String[] projection = {Phone.NUMBER};
+					Cursor cursor = getContentResolver().query(contactUri, null, null, null, null);
+					int column2 = cursor.getColumnIndex(Phone.DISPLAY_NAME);
+					int column1 = cursor.getColumnIndex(Phone.NUMBER);
 					cursor.moveToFirst();
-					int column = cursor.getColumnIndex(Phone.NUMBER);
-					
-					String phoneNumber = PhoneNumberUtils.stripSeparators(cursor.getString(column));
-					Conversation contact = this.service.database.newContact(phoneNumber);
+					String phoneNumber = PhoneNumberUtils.stripSeparators(cursor.getString(column1));
+					String name = cursor.getString(column2);
+					Conversation contact = this.service.database.newContact(phoneNumber, name);
 					service.conversations.add(contact);
 					this.onNewConversation(contact);
 				}

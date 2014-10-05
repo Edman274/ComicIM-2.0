@@ -55,11 +55,19 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
 	}
 	
+	public Conversation newContact(String phoneNumber, String name) {
+		Log.i(TAG, "newContact");
+		ContentValues cv = new ContentValues();
+		cv.put("phone_number", phoneNumber);
+		cv.put("name", name);
+		long id = this.getWritableDatabase().insert(TABLE_CONVERSATIONS, null, cv);
+		return new Conversation(id, phoneNumber, name);
+	}
+	
 	public Conversation newContact(String phoneNumber) {
 		Log.i(TAG, "newContact");
 		ContentValues cv = new ContentValues();
 		cv.put("phone_number", phoneNumber);
-		
 		long id = this.getWritableDatabase().insert(TABLE_CONVERSATIONS, null, cv);
 		return new Conversation(id, phoneNumber);
 	}
@@ -72,7 +80,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		
 		if (cursor.moveToFirst()) {
 			do {
-				result.add(new Conversation(cursor.getLong(0), cursor.getString(1)));
+				result.add(new Conversation(cursor.getLong(0), cursor.getString(1), cursor.getString(2)));
 	        } while (cursor.moveToNext());
 		}
 		

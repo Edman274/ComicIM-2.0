@@ -25,6 +25,7 @@ public final class ConversationViewHolder {
 	
 	public void populate(Conversation c) {
 		photo.setImageResource(R.drawable.ic_action_person);
-		name.setText(c.phoneNumber);
+		lastTime.setText(c.phoneNumber);
+		name.setText(c.name);
 	}
 }

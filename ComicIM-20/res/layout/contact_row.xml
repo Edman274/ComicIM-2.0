@@ -50,7 +50,7 @@
             </FrameLayout>
             
             <TextView 
-            	android:textSize="12.0sp" 
+            	android:textSize="13.0sp" 
             	android:textColor="#ffcdcdcd" android:ellipsize="end" 
             	android:gravity="right" android:layout_gravity="center_vertical" 
             	android:id="@+id/contact_row_last_date" android:layout_width="wrap_content" 
