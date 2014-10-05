@@ -166,7 +166,7 @@ public final class CoreService extends Service {
 			}
 		}
 		if (conversation == null) {
-			conversation = database.newContact(phoneNumber);
+			conversation = database.newContact(phoneNumber, "");
 			conversations.add(conversation);
 			
 			for (ConversationListener listener : listeners) {

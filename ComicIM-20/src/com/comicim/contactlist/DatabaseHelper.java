@@ -15,7 +15,7 @@ import android.util.Log;
 
 public final class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String TAG = "DatabaseHelper";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 8;
     private static final String DATABASE_NAME = DatabaseHelper.class.getPackage().getName();
 	
     private static final String TABLE_CONVERSATIONS = "conversations";
@@ -62,14 +62,6 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		cv.put("name", name);
 		long id = this.getWritableDatabase().insert(TABLE_CONVERSATIONS, null, cv);
 		return new Conversation(id, phoneNumber, name);
-	}
-	
-	public Conversation newContact(String phoneNumber) {
-		Log.i(TAG, "newContact");
-		ContentValues cv = new ContentValues();
-		cv.put("phone_number", phoneNumber);
-		long id = this.getWritableDatabase().insert(TABLE_CONVERSATIONS, null, cv);
-		return new Conversation(id, phoneNumber);
 	}
 	
 	public List<Conversation> getAllConversations() {

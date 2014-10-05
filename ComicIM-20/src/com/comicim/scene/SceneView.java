@@ -10,9 +10,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 //import android.graphics.Canvas;
 //import android.graphics.Color;
@@ -38,7 +40,7 @@ public class SceneView extends View {
 		super(context, attrs);
 		
 		textPaint = new Paint();
-		textPaint.setTextSize(40);
+		textPaint.setTextSize(30);
 		textPaint.setColor(Color.BLACK);
 		textPaint.setAntiAlias(true);
 		
@@ -57,28 +59,48 @@ public class SceneView extends View {
 	   setMeasuredDimension(w, h);
 	}
 	
-	public void renderDudes(Canvas canvas, Rect rect) {
+	public void renderDudes(Canvas canvas) {
 		int width = canvas.getWidth();
 		int height = canvas.getHeight();
 		
-		int dudeWidth = (height / 2) * dudeDrawable.getIntrinsicWidth() / dudeDrawable.getIntrinsicHeight();
+		int dudeHeight = height / 2;
+		int dudeWidth = dudeHeight * dudeDrawable.getIntrinsicWidth() / dudeDrawable.getIntrinsicHeight();
 		
-		dudeDrawable.setBounds(0, height * 1 / 2, dudeWidth, height);
+		canvas.save();
+		canvas.translate(10, height / 2 - 10);
+		dudeDrawable.setBounds(0, 0, dudeWidth, dudeHeight);
 		dudeDrawable.draw(canvas);
+		canvas.restore();
+		
+		canvas.save();
+		canvas.translate(width - 10, height / 2 - 10);
+		canvas.scale(-1, 1);
+		dudeDrawable.setBounds(0, 0, dudeWidth, dudeHeight);
+		dudeDrawable.draw(canvas);
+		canvas.restore();
+	}
+	
+	public void renderBoundingBox(Canvas canvas) {
+		textPaint.setStyle(Style.STROKE);
+		RectF rect = new RectF(5, 5, canvas.getWidth() - 5, canvas.getHeight() - 5);
+		canvas.drawRoundRect(rect, 3, 3, textPaint);
+		textPaint.setStyle(Style.FILL_AND_STROKE);
+	}
+	
+	public void renderMessages(Canvas canvas) {
+		for (int i = 0; i < messages.size(); i++) {
+			canvas.drawText(messages.get(i).text, 10, 20 + 20 * i, textPaint);
+		}
 	}
 	
 	@Override
     protected void onDraw(Canvas canvas) {
-		Rect canvasRect = new Rect(0, 0, canvas.getWidth(), canvas.getHeight());
-		
-		if (messages != null) {
-			renderDudes(canvas, canvasRect);
-			canvas.drawLine(0, 0, canvas.getWidth(), canvas.getHeight(), textPaint);
-			for (int i = 0; i < messages.size(); i++) {
-				canvas.drawText(messages.get(i).text, 10, 10, textPaint);
-			}
-		}
+		if (messages == null) return;
 		Log.i("SceneView", canvas.getWidth() + " " + canvas.getHeight());
+		
+		renderBoundingBox(canvas);
+		renderDudes(canvas);
+		renderMessages(canvas);
 	}
 
 	public void setMessages(List<Message> messages) {
