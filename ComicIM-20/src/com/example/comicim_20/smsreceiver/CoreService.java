@@ -132,12 +132,15 @@ public final class CoreService extends Service {
     }
 
 	public void sendMessage(Conversation conversation, String body) {
+		Log.i(TAG, "sendMessage");
 		Message msg = database.addMessage(conversation, true, body);
 		conversation.messages.add(msg);
 		sendMessage(conversation.phoneNumber, body);
 	}
 	
 	public Conversation getConversation(long id) {
+		Log.i(TAG, "getConversation");
+		
 		Conversation conversation = null;
 		for (Conversation c : conversations) {
 			if (c.id == id) {
@@ -148,6 +151,7 @@ public final class CoreService extends Service {
 	}
 
 	public Conversation getConversation(String phoneNumber) {
+		Log.i(TAG, "getConversation");
 		Conversation conversation = null;
 		for (Conversation c : conversations) {
 			if (c.phoneNumber == phoneNumber) {

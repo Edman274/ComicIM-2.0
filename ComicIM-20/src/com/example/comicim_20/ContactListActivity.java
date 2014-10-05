@@ -107,6 +107,7 @@ public class ContactListActivity extends ActionBarActivity implements Conversati
 
     @Override
 	public void onNewConversation(Conversation c) {
+    	Log.i(TAG, "onNewConversation");
     	this.contactListViewAdapter.notifyDataSetChanged();
 	}
 	@Override
