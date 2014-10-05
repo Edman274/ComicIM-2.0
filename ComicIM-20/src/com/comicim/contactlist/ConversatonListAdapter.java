@@ -37,7 +37,7 @@ public final class ConversatonListAdapter extends ArrayAdapter<Conversation> {
 			holder = (ConversationViewHolder) convertView.getTag();
 		}
 		
-		holder.populate(model.get(position));
+		holder.populate(context, model.get(position));
 		return view;
 	}
 }

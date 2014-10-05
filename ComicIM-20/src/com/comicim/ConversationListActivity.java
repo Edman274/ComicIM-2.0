@@ -142,24 +142,29 @@ public class ConversationListActivity extends ActionBarActivity implements Conve
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
     	Log.i(TAG, "onActivityResult.");
 		super.onActivityResult(requestCode, resultCode, data);
-			switch(requestCode) {
-			case(PICK_CONTACT):
-				if(resultCode == Activity.RESULT_OK) {
-					Uri contactUri = data.getData();
-					//String[] projection = {Phone.NUMBER};
-					Cursor cursor = getContentResolver().query(contactUri, null, null, null, null);
-					int column2 = cursor.getColumnIndex(Phone.DISPLAY_NAME);
-					int column1 = cursor.getColumnIndex(Phone.NUMBER);
-					int column3 = cursor.getColumnIndex(Phone.PHOTO_ID);
-					cursor.moveToFirst();
-					String phoneNumber = PhoneNumberUtils.stripSeparators(cursor.getString(column1));
-					String name = cursor.getString(column2);
-					String picture = cursor.getString(column3);
-					Conversation contact = this.service.database.newContact(phoneNumber, name, picture);
-					service.conversations.add(contact);
-					this.onNewConversation(contact);
-				}
+		
+		switch(requestCode) {
+		case PICK_CONTACT:
+			if (resultCode == Activity.RESULT_OK) {
+				Uri contactUri = data.getData();
+				
+				Cursor cursor = getContentResolver().query(contactUri, null, null, null, null);
+				
+				int displayNameColumn = cursor.getColumnIndex(Phone.DISPLAY_NAME);
+				int numberColumn = cursor.getColumnIndex(Phone.NUMBER);
+				int photoColumn = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Photo.PHOTO);
+				
+				cursor.moveToFirst();
+				
+				String phoneNumber = PhoneNumberUtils.stripSeparators(cursor.getString(numberColumn));
+				String name = cursor.getString(displayNameColumn);
+				byte[] picture = cursor.getBlob(photoColumn);
+				
+				Conversation contact = this.service.database.newContact(phoneNumber, name, picture);
+				service.conversations.add(contact);
+				this.onNewConversation(contact);
 			}
+		}
 	}
     
     public void onCreateContextMenu(ContextMenu menu, View list, ContextMenuInfo menuInfo) {
