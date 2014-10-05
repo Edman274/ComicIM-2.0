@@ -33,7 +33,7 @@
         </activity>
         
         <receiver
-    		android:name="com.example.comicim_20.smsreceiver.SmsReceiver"
+    		android:name="com.example.comicim_20.smsreceiver.CoreService.SmsReceiver"
     		android:enabled="true"
     		android:exported="true"
     		>

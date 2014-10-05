@@ -1,5 +1,6 @@
 package com.example.comicim_20.scene;
 
+import com.example.comicim_20.Message;
 import com.example.comicim_20.R;
 
 import android.content.Context;
@@ -25,26 +26,21 @@ import android.view.View;
 import android.widget.ImageView;
 //import android.widget.LinearLayout;
 
-public class SceneView extends View{
+public class SceneView {
 	
 	//private static Context context;
 	private Bitmap bitmap;
 	private Canvas canvas;
-	private ImageView imageView;
+	private Drawable drawable;
 	
-	public SceneView(Context context, AttributeSet attrs, String text)
-	{
-		super(context, attrs);
-		this.imageView = newImage (context, text);
-	}
-	public ImageView newImage(Context context, String text)
+	public Drawable newImage(Context context, String text)
 	{
 		Drawable[] layers = new Drawable[2];
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inPurgeable = true;
 		
-		bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.dude, options).copy(Bitmap.Config.ARGB_4444, true);
-		layers[0] = context.getResources().getDrawable(R.drawable.dude);
+		bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.dude_dancing, options).copy(Bitmap.Config.ARGB_4444, true);
+		layers[0] = context.getResources().getDrawable(R.drawable.dude_dancing);
 		
 		Paint paint = new Paint();
 		paint.setStyle(Style.FILL);
@@ -53,6 +49,7 @@ public class SceneView extends View{
 		paint.setAntiAlias(true);
 		
 		this.canvas = new Canvas(bitmap);
+		
 		
 		String[] textArr = text.split(" ");
 		String string = new String();
@@ -73,9 +70,10 @@ public class SceneView extends View{
 		layers[1] = new BitmapDrawable(context.getResources(), bitmap);
 		
 		LayerDrawable ld = new LayerDrawable(layers);
-		ImageView i = new ImageView(context);
-		i.setImageDrawable(ld);
-		return i;
+		return ld;
+		//ImageView i = new ImageView(context);
+		//i.setImageDrawable(ld);
+		//return i;
 	}
 
 }
