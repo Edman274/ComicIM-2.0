@@ -25,6 +25,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
     		"create table " + TABLE_CONVERSATIONS + "("
     		+ "id integer primary key, "
     		+ "phone_number text"
+    		+ "name text"
     		+ ")";
     private static final String CREATE_TABLE_MESSAGES = 
     		"create table " + TABLE_MESSAGES + "("

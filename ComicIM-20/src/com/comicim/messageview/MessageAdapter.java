@@ -32,7 +32,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 		if (convertView == null) {
 			LayoutInflater inflater = ((Activity) context).getLayoutInflater();
 			view = inflater.inflate(R.layout.message_row, null);
-			holder = new MessageRowHolder(view);
+			holder = new MessageRowHolder(context, view);
 			view.setTag(holder);
 		} else {
 			view = convertView;
