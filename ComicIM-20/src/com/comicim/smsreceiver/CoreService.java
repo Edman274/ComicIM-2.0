@@ -33,7 +33,7 @@ public final class CoreService extends Service {
 	public List<ConversationListener> listeners = new ArrayList<ConversationListener>();
 	
 	String name = null;
-	int picture = 0;
+	String picture = null;
 	
 	@Override
 	public void onCreate() {

@@ -154,7 +154,7 @@ public class ConversationListActivity extends ActionBarActivity implements Conve
 					cursor.moveToFirst();
 					String phoneNumber = PhoneNumberUtils.stripSeparators(cursor.getString(column1));
 					String name = cursor.getString(column2);
-					int picture = column3;
+					String picture = cursor.getString(column3);
 					Conversation contact = this.service.database.newContact(phoneNumber, name, picture);
 					service.conversations.add(contact);
 					this.onNewConversation(contact);

@@ -56,7 +56,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
 	}
 	
-	public Conversation newContact(String phoneNumber, String name, int picture) {
+	public Conversation newContact(String phoneNumber, String name, String picture) {
 		Log.i(TAG, "newContact");
 		ContentValues cv = new ContentValues();
 		cv.put("phone_number", phoneNumber);
@@ -78,7 +78,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 		
 		if (cursor.moveToFirst()) {
 			do {
-				result.add(new Conversation(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3)));
+				result.add(new Conversation(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3)));
 	        } while (cursor.moveToNext());
 		}
 		
