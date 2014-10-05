@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".ContactListActivity"
+            android:name="com.comicim.ConversationListActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,12 +28,12 @@
         </activity>
         
         <activity
-            android:name=".messageview.MessageView"
+            android:name="com.comicim.messageview.MessageView"
             android:label="@string/app_name" >
         </activity>
         
         <receiver
-    		android:name="com.example.comicim_20.smsreceiver.SmsReceiver"
+    		android:name="com.comicim.smsreceiver.SmsReceiver"
     		android:enabled="true"
     		android:exported="true"
     		>
@@ -47,7 +47,7 @@
 		</intent-filter> -->
 		
 		</receiver>
-        <service android:name=".smsreceiver.CoreService"></service>
+        <service android:name="com.comicim.smsreceiver.CoreService"></service>
     </application>
 
 </manifest>
